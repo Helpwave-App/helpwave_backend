@@ -15,13 +15,13 @@ public class User {
     @JoinColumn(name = "idProfile")
     private Profile profile;
 
-    @Column(name = "username", length = 30, unique = true)
+    @Column(name = "username",nullable = false, length = 30, unique = true)
     private String username;
 
-    @Column(name = "password", length = 200)
+    @Column(name = "password",nullable = false, length = 200)
     private String password;
 
-    @Column(name = "state", length = 1)
+    @Column(name = "state", nullable = false, length = 1)
     private Boolean state;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
