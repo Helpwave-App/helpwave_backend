@@ -10,15 +10,15 @@ public class UserDTO {
     private String username;
     private String password;
     private Boolean state;
-    private List<Role> roles;
+    private List<Role> role;
 
 
-    public List<Role> getRoles() {
-        return roles;
+    public List<Role> getRole() {
+        return role;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setRole(List<Role> role) {
+        this.role = role;
     }
 
     public int getIdUser() {

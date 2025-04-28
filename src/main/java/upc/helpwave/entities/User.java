@@ -26,8 +26,8 @@ public class User {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    @JoinColumn(name = "user_id")
-    private List<Role> roles;
+    @JoinColumn(name = "idRole")
+    private List<Role> role;
 
     public int getIdUser() {
         return idUser;
@@ -69,21 +69,21 @@ public class User {
         this.state = state;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public List<Role> getRole() {
+        return role;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setRole(List<Role> role) {
+        this.role = role;
     }
 
-    public User(int idUser, Profile profile, String username, String password, Boolean state, List<Role> roles) {
+    public User(int idUser, Profile profile, String username, String password, Boolean state, List<Role> role) {
         this.idUser = idUser;
         this.profile = profile;
         this.username = username;
         this.password = password;
         this.state = state;
-        this.roles = roles;
+        this.role = role;
     }
 
     public User() {

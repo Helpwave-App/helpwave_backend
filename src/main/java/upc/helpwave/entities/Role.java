@@ -3,7 +3,7 @@ package upc.helpwave.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "roles", uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "rol" }) })
+@Table(name = "role", uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "role" }) })
 public class Role {
 
 	private static final long serialVersionUID = 1L;
@@ -11,8 +11,8 @@ public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idRole;
-	@Column(name = "rol",length = 50, nullable = false)
-	private String rol;
+	@Column(name = "role",length = 50, nullable = false)
+	private String role;
 	
 	@ManyToOne
 	@JoinColumn(name="user_id", nullable=false)
@@ -30,11 +30,11 @@ public class Role {
 		this.user = user;
 	}
 
-	public String getRol() {
-		return rol;
+	public String getRole() {
+		return role;
 	}
-	public void setRol(String rol) {
-		this.rol = rol;
+	public void setRol(String role) {
+		this.role = role;
 	}
 
 	public Long getIdRole() {
@@ -45,9 +45,9 @@ public class Role {
 		this.idRole = idRole;
 	}
 
-	public Role(Long idRole, String rol, User user) {
+	public Role(Long idRole, String role, User user) {
 		this.idRole = idRole;
-		this.rol = rol;
+		this.role = role;
 		this.user = user;
 	}
 }
