@@ -30,7 +30,8 @@ public class Videocall {
     public Videocall() {
     }
 
-    public Videocall(int idVideocall, Empairing empairing, String token, String channel, LocalDateTime startVideocall, LocalDateTime endVideocall) {
+    public Videocall(int idVideocall, Empairing empairing, String token, String channel, LocalDateTime startVideocall,
+            LocalDateTime endVideocall) {
         this.idVideocall = idVideocall;
         this.empairing = empairing;
         this.token = token;

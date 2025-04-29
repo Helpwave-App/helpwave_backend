@@ -1,8 +1,9 @@
 package upc.helpwave.entities;
 
 import jakarta.persistence.*;
+
 @Entity
-@Table(name="Skill")
+@Table(name = "Skill")
 public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

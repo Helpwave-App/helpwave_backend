@@ -8,21 +8,26 @@ import upc.helpwave.repositories.UserRepository;
 import upc.helpwave.serviceinterfaces.IUserService;
 
 import java.util.List;
+
 @Service
 public class UserServiceImplement implements IUserService {
     @Autowired
     private UserRepository uR;
+
     @Autowired
     private PasswordEncoder pE;
+
     @Override
     public Integer insert(User user) {
-        String newpassword = pE.encode(user.getPassword());
-        user.setPassword(newpassword);
-        int rpta = uR.buscarUsername(user.getUsername());
-        if (rpta == 0) {
+        String newPassword = pE.encode(user.getPassword());
+        user.setPassword(newPassword);
+
+        int exists = uR.buscarUsername(user.getUsername());
+        if (exists == 0) {
             uR.save(user);
         }
-        return rpta;    }
+        return exists;
+    }
 
     @Override
     public void delete(int idUser) {

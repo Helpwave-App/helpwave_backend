@@ -35,7 +35,8 @@ public class Reports {
     public Reports() {
     }
 
-    public Reports(int idReport, Videocall videocall, TypeReport typeReport, StateReport stateReport, String typeReportDescription, String descriptionReport, LocalDateTime dateReport) {
+    public Reports(int idReport, Videocall videocall, TypeReport typeReport, StateReport stateReport,
+            String typeReportDescription, String descriptionReport, LocalDateTime dateReport) {
         this.idReport = idReport;
         this.videocall = videocall;
         this.typeReport = typeReport;

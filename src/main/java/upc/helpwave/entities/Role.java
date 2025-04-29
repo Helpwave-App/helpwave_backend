@@ -1,6 +1,9 @@
 package upc.helpwave.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "role", uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "role" }) })
@@ -11,29 +14,40 @@ public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idRole;
-	@Column(name = "role",length = 50, nullable = false)
+
+	@Column(name = "role", length = 50, nullable = false)
 	private String role;
-	
-	@ManyToOne
-	@JoinColumn(name="user_id", nullable=false)
-	private User user;
+
+	@OneToMany(mappedBy = "role")
+	@JsonIgnore
+	private List<User> users;
 
 	public Role() {
 	}
-//GETTERS AND SETTERES
 
-	public User getUser() {
-		return user;
+	public Role(String role) {
+		this.role = role;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public Role(Long idRole, String role) {
+		this.idRole = idRole;
+		this.role = role;
+	}
+	// GETTERS AND SETTERES
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	public String getRole() {
 		return role;
 	}
-	public void setRol(String role) {
+
+	public void setRole(String role) {
 		this.role = role;
 	}
 
@@ -43,11 +57,5 @@ public class Role {
 
 	public void setIdRole(Long idRole) {
 		this.idRole = idRole;
-	}
-
-	public Role(Long idRole, String role, User user) {
-		this.idRole = idRole;
-		this.role = role;
-		this.user = user;
 	}
 }

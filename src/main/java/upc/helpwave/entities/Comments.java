@@ -30,7 +30,8 @@ public class Comments {
     public Comments() {
     }
 
-    public Comments(int idComment, Videocall videocall, String descriptionComment, int scoreVolunteer, LocalDateTime dateComment, int scoreVideocall) {
+    public Comments(int idComment, Videocall videocall, String descriptionComment, int scoreVolunteer,
+            LocalDateTime dateComment, int scoreVideocall) {
         this.idComment = idComment;
         this.videocall = videocall;
         this.descriptionComment = descriptionComment;
