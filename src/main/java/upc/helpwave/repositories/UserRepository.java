@@ -15,9 +15,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	//BUSCAR POR NOMBRE
 	@Query("select count(u.username) from User u where u.username =:username")
 	public int buscarUsername(@Param("username") String nombre);
-	//INSERTAR ROLES
-	@Transactional
-	@Modifying
-	@Query(value = "insert into role (role, user_id) VALUES (:role, :user_id)", nativeQuery = true)
-	public void insRole(@Param("role") String authority, @Param("user_id") int user_id);
 }

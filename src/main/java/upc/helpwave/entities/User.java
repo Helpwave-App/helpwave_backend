@@ -11,8 +11,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUser;
 
-    @OneToOne
-    @JoinColumn(name = "idProfile")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idProfile", referencedColumnName = "idProfile")
     private Profile profile;
 
     @Column(name = "username",nullable = false, length = 30, unique = true)
@@ -24,10 +24,10 @@ public class User {
     @Column(name = "state", nullable = false, length = 1)
     private Boolean state;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "idRole")
-    private List<Role> role;
+    @JoinColumn(name = "id_role", nullable = false)
+    private Role role;
 
     public int getIdUser() {
         return idUser;
@@ -69,15 +69,11 @@ public class User {
         this.state = state;
     }
 
-    public List<Role> getRole() {
-        return role;
-    }
+    public Role getRole() { return role; }
 
-    public void setRole(List<Role> role) {
-        this.role = role;
-    }
+    public void setRole(Role role) { this.role = role; }
 
-    public User(int idUser, Profile profile, String username, String password, Boolean state, List<Role> role) {
+    public User(int idUser, Profile profile, String username, String password, Boolean state, Role role) {
         this.idUser = idUser;
         this.profile = profile;
         this.username = username;
