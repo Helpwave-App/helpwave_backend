@@ -15,7 +15,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import upc.helpwave.serviceimplements.JwtUserDetailsService;
 import java.io.IOException;
 
-
 //Clase 6
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -23,6 +22,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	private JwtUserDetailsService jwtUserDetailsService;
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {

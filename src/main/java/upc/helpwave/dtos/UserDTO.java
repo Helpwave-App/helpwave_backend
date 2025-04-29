@@ -1,17 +1,12 @@
 package upc.helpwave.dtos;
-import upc.helpwave.entities.Profile;
-import upc.helpwave.entities.Role;
-
-import java.util.List;
 
 public class UserDTO {
     private int idUser;
-    private Profile profile;
     private String username;
     private String password;
     private Boolean state;
     private Long idRole;
-
+    private ProfileDTO profileDto;
 
     public Long getIdRole() {
         return idRole;
@@ -29,12 +24,12 @@ public class UserDTO {
         this.idUser = idUser;
     }
 
-    public Profile getProfile() {
-        return profile;
+    public ProfileDTO getProfile() {
+        return profileDto;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setProfile(ProfileDTO profile) {
+        this.profileDto = profile;
     }
 
     public String getUsername() {

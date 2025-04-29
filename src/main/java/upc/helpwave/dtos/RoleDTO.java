@@ -1,5 +1,4 @@
 package upc.helpwave.dtos;
-import upc.helpwave.entities.User;
 
 public class RoleDTO {
     private Long idRole;

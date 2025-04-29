@@ -15,7 +15,7 @@ public class Role {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idRole;
 
-	@Column(name = "role",length = 50, nullable = false)
+	@Column(name = "role", length = 50, nullable = false)
 	private String role;
 
 	@OneToMany(mappedBy = "role")
@@ -33,11 +33,15 @@ public class Role {
 		this.idRole = idRole;
 		this.role = role;
 	}
-//GETTERS AND SETTERES
+	// GETTERS AND SETTERES
 
-	public List<User> getUsers() { return users; }
+	public List<User> getUsers() {
+		return users;
+	}
 
-	public void setUsers(List<User> users) { this.users = users; }
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
 
 	public String getRole() {
 		return role;

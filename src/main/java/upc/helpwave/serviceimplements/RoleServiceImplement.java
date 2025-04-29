@@ -7,6 +7,7 @@ import upc.helpwave.repositories.RoleRepository;
 import upc.helpwave.serviceinterfaces.IRoleService;
 
 import java.util.List;
+
 @Service
 public class RoleServiceImplement implements IRoleService {
     @Autowired

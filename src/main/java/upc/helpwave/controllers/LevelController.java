@@ -15,35 +15,38 @@ import java.util.stream.Collectors;
 public class LevelController {
     @Autowired
     private ILevelService lS;
+
     @PostMapping
-    public void registrar(@RequestBody LevelDTO dto){
-        ModelMapper m=new ModelMapper();
-        Level r=m.map(dto, Level.class);
+    public void registrar(@RequestBody LevelDTO dto) {
+        ModelMapper m = new ModelMapper();
+        Level r = m.map(dto, Level.class);
         lS.insert(r);
     }
+
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable("id") Integer id)
-    {
+    public void eliminar(@PathVariable("id") Integer id) {
         lS.delete(id);
     }
 
     @GetMapping("/{id}")
-    public LevelDTO listarId(@PathVariable("id")Integer id){
-        ModelMapper m=new ModelMapper();
-        LevelDTO dto=m.map(lS.listId(id),LevelDTO.class);
+    public LevelDTO listarId(@PathVariable("id") Integer id) {
+        ModelMapper m = new ModelMapper();
+        LevelDTO dto = m.map(lS.listId(id), LevelDTO.class);
         return dto;
     }
+
     @GetMapping
-    public List<LevelDTO> listar(){
-        return lS.list().stream().map(x->{
-            ModelMapper m=new ModelMapper();
-            return m.map(x,LevelDTO.class);
+    public List<LevelDTO> listar() {
+        return lS.list().stream().map(x -> {
+            ModelMapper m = new ModelMapper();
+            return m.map(x, LevelDTO.class);
         }).collect(Collectors.toList());
     }
+
     @PutMapping
     public void modificar(@RequestBody LevelDTO dto) {
         ModelMapper m = new ModelMapper();
-        Level a=m.map(dto,Level.class);
+        Level a = m.map(dto, Level.class);
         lS.insert(a);
     }
 }

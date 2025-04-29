@@ -1,4 +1,5 @@
 package upc.helpwave.dtos;
+
 import upc.helpwave.entities.StateReport;
 import upc.helpwave.entities.TypeReport;
 import upc.helpwave.entities.Videocall;

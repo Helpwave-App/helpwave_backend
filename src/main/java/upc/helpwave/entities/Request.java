@@ -2,8 +2,9 @@ package upc.helpwave.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
 @Entity
-@Table(name="Request")
+@Table(name = "Request")
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
