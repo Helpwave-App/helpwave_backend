@@ -16,31 +16,31 @@ public class RoleController {
     @Autowired
     private IRoleService rS;
     @PostMapping
-    public void registrar(@RequestBody RoleDTO dto){
+    public void register(@RequestBody RoleDTO dto){
         ModelMapper m=new ModelMapper();
         Role r=m.map(dto, Role.class);
         rS.insert(r);
     }
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable("id") Long id)
+    public void delete(@PathVariable("id") Long id)
     {
         rS.delete(id);
     }
     @GetMapping("/{id}")
-    public RoleDTO listarId(@PathVariable("id")Long id){
+    public RoleDTO listId(@PathVariable("id")Long id){
         ModelMapper m=new ModelMapper();
         RoleDTO dto=m.map(rS.listId(id),RoleDTO.class);
         return dto;
     }
     @GetMapping
-    public List<RoleDTO> listar(){
+    public List<RoleDTO> list(){
         return rS.list().stream().map(x->{
             ModelMapper m=new ModelMapper();
             return m.map(x,RoleDTO.class);
         }).collect(Collectors.toList());
     }
     @PutMapping
-    public void modificar(@RequestBody RoleDTO dto) {
+    public void update(@RequestBody RoleDTO dto) {
         ModelMapper m = new ModelMapper();
         Role a=m.map(dto,Role.class);
         rS.insert(a);

@@ -2,7 +2,7 @@ package upc.helpwave.dtos;
 import upc.helpwave.entities.Profile;
 import upc.helpwave.entities.Skill;
 
-public class TaskProfileDTO {
+public class SkillProfileDTO {
     private int idSkillProfile;
     private Profile profile;
     private Skill skill;

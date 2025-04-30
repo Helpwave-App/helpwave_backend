@@ -11,7 +11,7 @@ public class Profile {
     private int idProfile;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "idLevel", nullable = false)
+    @JoinColumn(name = "idLevel")
     private Level level;
 
     @Column(name = "name", nullable = false, length = 30)
@@ -20,7 +20,7 @@ public class Profile {
     @Column(name = "lastName", nullable = false, length = 30)
     private String lastName;
 
-    @Column(name = "birthDate", nullable = false)
+    @Column(name = "birthDate")
     private LocalDate birthDate;
 
     @Column(name = "scoreProfile")

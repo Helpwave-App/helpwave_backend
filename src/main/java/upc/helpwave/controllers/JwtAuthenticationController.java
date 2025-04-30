@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import upc.helpwave.entities.User;
+import upc.helpwave.repositories.UserRepository;
 import upc.helpwave.security.JwtRequest;
 import upc.helpwave.security.JwtResponse;
 import upc.helpwave.security.JwtTokenUtil;
@@ -25,12 +27,21 @@ public class JwtAuthenticationController {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private JwtUserDetailsService userDetailsService;
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token));
+
+        // Obtener el User con su rol
+        User user = userRepository.findByUsername(authenticationRequest.getUsername());
+        String roleName = user.getRole().getRole();
+
+        return ResponseEntity.ok(new JwtResponse(token, roleName));
     }
     private void authenticate(String username, String password) throws Exception {
         try {

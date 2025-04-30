@@ -24,24 +24,24 @@ public class UserController {
     @Autowired
     private PasswordEncoder bcrypt;
     @PostMapping("/register")
-    public void registrar(@RequestBody UserDTO dto){
+    public void register(@RequestBody UserDTO dto){
         ModelMapper m=new ModelMapper();
         User u=m.map(dto, User.class);
         uS.insert(u);
     }
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable("id") int idUser)
+    public void delete(@PathVariable("id") int idUser)
     {
         uS.delete(idUser);
     }
     @GetMapping("/{id}")
-    public UserDTO listarId(@PathVariable("id")int idUser){
+    public UserDTO listId(@PathVariable("id")int idUser){
         ModelMapper m=new ModelMapper();
         UserDTO dto=m.map(uS.listId(idUser),UserDTO.class);
         return dto;
     }
     @PutMapping
-    public void modificar(@RequestBody UserDTO dto) {
+    public void update(@RequestBody UserDTO dto) {
         ModelMapper m = new ModelMapper();
         User u=m.map(dto,User.class);
         uS.insert(u);
@@ -57,7 +57,7 @@ public class UserController {
         return "usersecurity/listUser";
     }
     @GetMapping
-    public List<UserDTO> listar() {
+    public List<UserDTO> list() {
         return uS.list().stream().map(x -> {
             ModelMapper m = new ModelMapper();
             return m.map(x, UserDTO.class);
