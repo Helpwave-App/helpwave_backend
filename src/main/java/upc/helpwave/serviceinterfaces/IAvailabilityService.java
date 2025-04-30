@@ -11,4 +11,7 @@ public interface IAvailabilityService{
     public Availability listId(Integer idAvailability);
 
     public List<Availability> list();
+
+    void insertAll(List<Availability> availabilities);
+
 }

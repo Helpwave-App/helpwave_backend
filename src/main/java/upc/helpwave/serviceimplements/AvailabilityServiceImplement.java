@@ -31,4 +31,9 @@ public class AvailabilityServiceImplement implements IAvailabilityService {
     public List<Availability> list() {
         return aR.findAll();
     }
+
+    @Override
+    public void insertAll(List<Availability> availabilities) {
+        aR.saveAll(availabilities);
+    }
 }

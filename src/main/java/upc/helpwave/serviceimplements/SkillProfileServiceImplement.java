@@ -30,4 +30,9 @@ public class SkillProfileServiceImplement implements ISkillProfileService {
     public List<SkillProfile> list() {
         return spR.findAll();
     }
+
+    @Override
+    public void insertAll(List<SkillProfile> skillProfiles) {
+        spR.saveAll(skillProfiles);
+    }
 }

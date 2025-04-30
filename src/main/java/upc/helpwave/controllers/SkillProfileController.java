@@ -3,9 +3,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.SkillProfileDTO;
+import upc.helpwave.dtos.SkillProfileListDTO;
+import upc.helpwave.entities.Profile;
+import upc.helpwave.entities.Skill;
 import upc.helpwave.entities.SkillProfile;
+import upc.helpwave.repositories.ProfileRepository;
+import upc.helpwave.repositories.SkillRepository;
 import upc.helpwave.serviceinterfaces.ISkillProfileService;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -13,6 +19,35 @@ import java.util.stream.Collectors;
 public class SkillProfileController {
     @Autowired
     private ISkillProfileService spS;
+
+    @Autowired
+    private ProfileRepository pR;
+
+    @Autowired
+    private SkillRepository sR;
+
+    @PostMapping("/batch")
+    public void registerBatch(@RequestBody SkillProfileListDTO dto) {
+        Optional<Profile> profileOpt = pR.findById(dto.getIdProfile());
+        if (!profileOpt.isPresent()) {
+            throw new RuntimeException("Perfil no encontrado con ID: " + dto.getIdProfile());
+        }
+
+        Profile profile = profileOpt.get();
+
+        List<SkillProfile> list = dto.getSkillIds().stream().map(skillId -> {
+            Optional<Skill> skillOpt = sR.findById(skillId);
+            if (!skillOpt.isPresent()) {
+                throw new RuntimeException("Skill no encontrado con ID: " + skillId);
+            }
+            SkillProfile sp = new SkillProfile();
+            sp.setProfile(profile);
+            sp.setSkill(skillOpt.get());
+            return sp;
+        }).collect(Collectors.toList());
+
+        spS.insertAll(list);
+    }
     @PostMapping
     public void register(@RequestBody SkillProfileDTO dto){
         ModelMapper m=new ModelMapper();

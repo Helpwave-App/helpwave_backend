@@ -11,4 +11,7 @@ public interface ISkillProfileService {
     public SkillProfile listId(Integer idSkillProfile);
 
     public List<SkillProfile> list();
+
+    void insertAll(List<SkillProfile> skillProfiles);
+
 }

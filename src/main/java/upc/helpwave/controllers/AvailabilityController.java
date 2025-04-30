@@ -3,9 +3,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.AvailabilityDTO;
+import upc.helpwave.dtos.AvailabilityListDTO;
 import upc.helpwave.entities.Availability;
+import upc.helpwave.entities.Profile;
+import upc.helpwave.repositories.ProfileRepository;
 import upc.helpwave.serviceinterfaces.IAvailabilityService;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -13,6 +17,27 @@ import java.util.stream.Collectors;
 public class AvailabilityController {
     @Autowired
     private IAvailabilityService aS;
+    @Autowired
+    private ProfileRepository pR;
+
+    @PostMapping("/batch")
+    public void registerBatch(@RequestBody AvailabilityListDTO dto) {
+        Optional<Profile> profileOpt = pR.findById(dto.getIdProfile());
+        if (!profileOpt.isPresent()) {
+            throw new RuntimeException("Perfil no encontrado con ID: " + dto.getIdProfile());
+        }
+
+        Profile profile = profileOpt.get();
+        ModelMapper m = new ModelMapper();
+
+        List<Availability> list = dto.getAvailabilities().stream().map(a -> {
+            Availability availability = m.map(a, Availability.class);
+            availability.setProfile(profile);
+            return availability;
+        }).collect(Collectors.toList());
+
+        aS.insertAll(list);
+    }
     @PostMapping
     public void register(@RequestBody AvailabilityDTO dto){
         ModelMapper m=new ModelMapper();
