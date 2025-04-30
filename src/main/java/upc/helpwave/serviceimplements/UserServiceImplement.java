@@ -8,6 +8,7 @@ import upc.helpwave.repositories.UserRepository;
 import upc.helpwave.serviceinterfaces.IUserService;
 
 import java.util.List;
+
 @Service
 public class UserServiceImplement implements IUserService {
     @Autowired

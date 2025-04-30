@@ -3,7 +3,7 @@ package upc.helpwave.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="SkillProfile")
+@Table(name = "SkillProfile")
 public class SkillProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

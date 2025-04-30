@@ -1,4 +1,5 @@
 package upc.helpwave.dtos;
+
 import upc.helpwave.entities.Profile;
 
 public class AvailabilityDTO {

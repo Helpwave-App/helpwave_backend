@@ -7,10 +7,12 @@ import upc.helpwave.repositories.LevelRepository;
 import upc.helpwave.serviceinterfaces.ILevelService;
 
 import java.util.List;
+
 @Service
 public class LevelServiceImplement implements ILevelService {
     @Autowired
     private LevelRepository lR;
+
     @Override
     public void insert(Level level) {
         lR.save(level);

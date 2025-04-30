@@ -7,10 +7,12 @@ import upc.helpwave.repositories.RoleRepository;
 import upc.helpwave.serviceinterfaces.IRoleService;
 
 import java.util.List;
+
 @Service
 public class RoleServiceImplement implements IRoleService {
     @Autowired
     private RoleRepository rR;
+
     @Override
     public void insert(Role role) {
         rR.save(role);
@@ -20,6 +22,7 @@ public class RoleServiceImplement implements IRoleService {
     public void delete(Long idRole) {
         rR.deleteById(idRole);
     }
+
     @Override
     public List<Role> list() {
         return rR.findAll();
