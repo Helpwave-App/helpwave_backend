@@ -4,7 +4,7 @@ import upc.helpwave.entities.Profile;
 
 public class AvailabilityDTO {
     private int idAvailability;
-    private Profile profile;
+    private int idProfile;
     private String day;
     private String hourStart;
     private String hourEnd;
@@ -17,12 +17,12 @@ public class AvailabilityDTO {
         this.idAvailability = idAvailability;
     }
 
-    public Profile getProfile() {
-        return profile;
+    public int getIdProfile() {
+        return idProfile;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setIdProfile(int idProfile) {
+        this.idProfile = idProfile;
     }
 
     public String getDay() {

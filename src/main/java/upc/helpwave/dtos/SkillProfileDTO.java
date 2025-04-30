@@ -1,12 +1,9 @@
 package upc.helpwave.dtos;
 
-import upc.helpwave.entities.Profile;
-import upc.helpwave.entities.Skill;
-
 public class SkillProfileDTO {
     private int idSkillProfile;
-    private Profile profile;
-    private Skill skill;
+    private int idProfile;
+    private int idSkill;
 
     public int getIdSkillProfile() {
         return idSkillProfile;
@@ -16,19 +13,19 @@ public class SkillProfileDTO {
         this.idSkillProfile = idSkillProfile;
     }
 
-    public Profile getProfile() {
-        return profile;
+    public int getIdProfile() {
+        return idProfile;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setIdProfile(int idProfile) {
+        this.idProfile = idProfile;
     }
 
-    public Skill getSkill() {
-        return skill;
+    public int getIdSkill() {
+        return idSkill;
     }
 
-    public void setSkill(Skill skill) {
-        this.skill = skill;
+    public void setIdSkill(int idSkill) {
+        this.idSkill = idSkill;
     }
 }
