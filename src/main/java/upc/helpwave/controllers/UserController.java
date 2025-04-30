@@ -23,29 +23,38 @@ public class UserController {
     private IUserService uS;
     @Autowired
     private PasswordEncoder bcrypt;
+
     @PostMapping("/register")
-    public void register(@RequestBody UserDTO dto){
-        ModelMapper m=new ModelMapper();
-        User u=m.map(dto, User.class);
+    public void register(@RequestBody UserDTO dto) {
+        ModelMapper m = new ModelMapper();
+        User u = m.map(dto, User.class);
         uS.insert(u);
     }
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") int idUser)
-    {
+    public void delete(@PathVariable("id") int idUser) {
         uS.delete(idUser);
     }
+
     @GetMapping("/{id}")
-    public UserDTO listId(@PathVariable("id")int idUser){
-        ModelMapper m=new ModelMapper();
-        UserDTO dto=m.map(uS.listId(idUser),UserDTO.class);
+    public UserDTO listId(@PathVariable("id") int idUser) {
+        ModelMapper m = new ModelMapper();
+        UserDTO dto = m.map(uS.listId(idUser), UserDTO.class);
         return dto;
     }
+
+    @GetMapping("/check-username")
+    public boolean checkUsername(@RequestParam("username") String username) {
+        return uS.existsByUsername(username); // Suponiendo que tengas un método en tu servicio IUserService
+    }
+
     @PutMapping
     public void update(@RequestBody UserDTO dto) {
         ModelMapper m = new ModelMapper();
-        User u=m.map(dto,User.class);
+        User u = m.map(dto, User.class);
         uS.insert(u);
     }
+
     @GetMapping("/list")
     public String listUser(Model model) {
         try {
@@ -56,6 +65,7 @@ public class UserController {
         }
         return "usersecurity/listUser";
     }
+
     @GetMapping
     public List<UserDTO> list() {
         return uS.list().stream().map(x -> {
@@ -63,6 +73,7 @@ public class UserController {
             return m.map(x, UserDTO.class);
         }).collect(Collectors.toList());
     }
+
     @PostMapping("/save")
     public String saveUser(@Valid User user, BindingResult result, Model model, SessionStatus status) throws Exception {
         if (result.hasErrors()) {

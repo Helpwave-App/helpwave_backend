@@ -12,4 +12,6 @@ public interface IUserService {
     public User listId(int idUser);
 
     public List<User> list();
+
+    public boolean existsByUsername(String username);
 }

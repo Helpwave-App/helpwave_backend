@@ -43,4 +43,9 @@ public class UserServiceImplement implements IUserService {
     public List<User> list() {
         return uR.findAll();
     }
+
+    public boolean existsByUsername(String username) {
+        return uR.existsByUsername(username);
+    }
+
 }
