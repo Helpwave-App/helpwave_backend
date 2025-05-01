@@ -45,7 +45,7 @@ public class UserController {
 
     @GetMapping("/check-username")
     public boolean checkUsername(@RequestParam("username") String username) {
-        return uS.existsByUsername(username); // Suponiendo que tengas un método en tu servicio IUserService
+        return uS.existsByUsername(username);
     }
 
     @PutMapping

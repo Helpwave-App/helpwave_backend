@@ -61,6 +61,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/authenticate").permitAll()
                         .requestMatchers("/user/register").permitAll()
+                        .requestMatchers("/user/check-username").permitAll()
                         .requestMatchers("/availabilities").permitAll()
                         .requestMatchers("/skillProfiles").permitAll()
                         .anyRequest().authenticated())
