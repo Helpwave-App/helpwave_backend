@@ -2,8 +2,6 @@ package upc.helpwave.entities;
 
 import jakarta.persistence.*;
 
-import java.time.LocalTime;
-
 @Entity
 @Table(name = "Availability")
 public class Availability {
@@ -19,15 +17,15 @@ public class Availability {
     private String day;
 
     @Column(name = "hourStart", nullable = false, length = 5)
-    private LocalTime hourStart;
+    private String hourStart;
 
     @Column(name = "hourEnd", nullable = false, length = 5)
-    private LocalTime hourEnd;
+    private String hourEnd;
 
     public Availability() {
     }
 
-    public Availability(int idAvailability, Profile profile, String day, LocalTime hourStart, LocalTime hourEnd) {
+    public Availability(int idAvailability, Profile profile, String day, String hourStart, String hourEnd) {
         this.idAvailability = idAvailability;
         this.profile = profile;
         this.day = day;
@@ -59,19 +57,19 @@ public class Availability {
         this.day = day;
     }
 
-    public LocalTime getHourStart() {
+    public String getHourStart() {
         return hourStart;
     }
 
-    public void setHourStart(LocalTime hourStart) {
+    public void setHourStart(String hourStart) {
         this.hourStart = hourStart;
     }
 
-    public LocalTime getHourEnd() {
+    public String getHourEnd() {
         return hourEnd;
     }
 
-    public void setHourEnd(LocalTime hourEnd) {
+    public void setHourEnd(String hourEnd) {
         this.hourEnd = hourEnd;
     }
 }
