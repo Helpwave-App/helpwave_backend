@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -59,11 +60,17 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/authenticate").permitAll()
-                        .requestMatchers("/user/register").permitAll()
-                        .requestMatchers("/user/check-username").permitAll()
-                        .requestMatchers("/availabilities").permitAll()
-                        .requestMatchers("/skillProfiles").permitAll()
+                        // Permitir POST en estas rutas
+                        .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/skillProfiles/batch").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/availabilities/batch").permitAll()
+
+                        // Permitir GET en estas rutas
+                        .requestMatchers(HttpMethod.GET, "/user/check-username").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/skills").permitAll()
+
+                        // Todo lo demás requiere autenticación
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
