@@ -2,12 +2,14 @@ package upc.helpwave.dtos;
 
 import upc.helpwave.entities.Profile;
 
+import java.time.LocalTime;
+
 public class AvailabilityDTO {
     private int idAvailability;
     private int idProfile;
     private String day;
-    private String hourStart;
-    private String hourEnd;
+    private LocalTime hourStart;
+    private LocalTime hourEnd;
 
     public int getIdAvailability() {
         return idAvailability;
@@ -33,19 +35,19 @@ public class AvailabilityDTO {
         this.day = day;
     }
 
-    public String getHourStart() {
+    public LocalTime getHourStart() {
         return hourStart;
     }
 
-    public void setHourStart(String hourStart) {
+    public void setHourStart(LocalTime hourStart) {
         this.hourStart = hourStart;
     }
 
-    public String getHourEnd() {
+    public LocalTime getHourEnd() {
         return hourEnd;
     }
 
-    public void setHourEnd(String hourEnd) {
+    public void setHourEnd(LocalTime hourEnd) {
         this.hourEnd = hourEnd;
     }
 }
