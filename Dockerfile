@@ -1,7 +1,13 @@
-FROM openjdk:17-jdk-alpine
+# Usa una imagen Maven para compilar
+FROM maven:3.8.5-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-COPY target/HelpWave-0.0.1-SNAPSHOT.war /app/helpwave.war
-
+# Usa una imagen más liviana para ejecutar el .war
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY --from=build /app/target/*.war app.war
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "/app/helpwave.war"]
+ENV PORT=8080
+CMD ["java", "-jar", "app.war"]
