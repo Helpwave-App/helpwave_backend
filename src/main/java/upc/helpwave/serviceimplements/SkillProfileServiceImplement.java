@@ -2,6 +2,7 @@ package upc.helpwave.serviceimplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import upc.helpwave.entities.Profile;
 import upc.helpwave.entities.SkillProfile;
 import upc.helpwave.repositories.SkillProfileRepository;
 import upc.helpwave.serviceinterfaces.ISkillProfileService;
@@ -35,4 +36,11 @@ public class SkillProfileServiceImplement implements ISkillProfileService {
     public void insertAll(List<SkillProfile> skillProfiles) {
         spR.saveAll(skillProfiles);
     }
+
+    @Override
+    public List<SkillProfile> findByProfile(Profile profile) {
+        return spR.findByProfile(profile);
+    }
+
 }
+
