@@ -37,11 +37,11 @@ public class JwtAuthenticationController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
 
-        // Obtener el User con su rol
         User user = userRepository.findByUsername(authenticationRequest.getUsername());
         String roleName = user.getRole().getRole();
+        int idUser = user.getIdUser();
 
-        return ResponseEntity.ok(new JwtResponse(token, roleName));
+        return ResponseEntity.ok(new JwtResponse(token, roleName, idUser));
     }
     private void authenticate(String username, String password) throws Exception {
         try {

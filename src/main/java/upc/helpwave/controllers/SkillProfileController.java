@@ -7,8 +7,10 @@ import upc.helpwave.dtos.SkillProfileListDTO;
 import upc.helpwave.entities.Profile;
 import upc.helpwave.entities.Skill;
 import upc.helpwave.entities.SkillProfile;
+import upc.helpwave.entities.User;
 import upc.helpwave.repositories.ProfileRepository;
 import upc.helpwave.repositories.SkillRepository;
+import upc.helpwave.repositories.UserRepository;
 import upc.helpwave.serviceinterfaces.ISkillProfileService;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,9 @@ public class SkillProfileController {
 
     @Autowired
     private SkillRepository sR;
+
+    @Autowired
+    private UserRepository uR;
 
     @PostMapping("/batch")
     public void registerBatch(@RequestBody SkillProfileListDTO dto) {
@@ -78,5 +83,31 @@ public class SkillProfileController {
         ModelMapper m = new ModelMapper();
         SkillProfile a=m.map(dto,SkillProfile.class);
         spS.insert(a);
+    }
+
+    @GetMapping("/user/{idUser}")
+    public List<SkillProfileDTO> listByUser(@PathVariable("idUser") int idUser) {
+        Optional<User> userOpt = uR.findById(idUser);
+        if (!userOpt.isPresent()) {
+            throw new RuntimeException("Usuario no encontrado con ID: " + idUser);
+        }
+
+        Profile profile = userOpt.get().getProfile();
+        if (profile == null) {
+            throw new RuntimeException("El usuario no tiene un perfil asociado.");
+        }
+
+        List<SkillProfile> skillProfiles = spS.findByProfile(profile);
+
+        ModelMapper m = new ModelMapper();
+        return skillProfiles.stream()
+                .map(sp -> {
+                    SkillProfileDTO dto = new SkillProfileDTO();
+                    dto.setIdSkillProfile(sp.getIdSkillProfile());
+                    dto.setIdProfile(sp.getProfile().getIdProfile());
+                    dto.setIdSkill(sp.getSkill().getIdSkill());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }

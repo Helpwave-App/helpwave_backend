@@ -6,7 +6,9 @@ import upc.helpwave.dtos.AvailabilityDTO;
 import upc.helpwave.dtos.AvailabilityListDTO;
 import upc.helpwave.entities.Availability;
 import upc.helpwave.entities.Profile;
+import upc.helpwave.entities.User;
 import upc.helpwave.repositories.ProfileRepository;
+import upc.helpwave.repositories.UserRepository;
 import upc.helpwave.serviceinterfaces.IAvailabilityService;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +21,8 @@ public class AvailabilityController {
     private IAvailabilityService aS;
     @Autowired
     private ProfileRepository pR;
+    @Autowired
+    private UserRepository uR;
 
     @PostMapping("/batch")
     public void registerBatch(@RequestBody AvailabilityListDTO dto) {
@@ -68,5 +72,25 @@ public class AvailabilityController {
         ModelMapper m = new ModelMapper();
         Availability a=m.map(dto,Availability.class);
         aS.insert(a);
+    }
+
+    @GetMapping("/user/{idUser}")
+    public List<AvailabilityDTO> listByUser(@PathVariable("idUser") int idUser) {
+        Optional<User> userOpt = uR.findById(idUser);
+        if (!userOpt.isPresent()) {
+            throw new RuntimeException("Usuario no encontrado con ID: " + idUser);
+        }
+
+        Profile profile = userOpt.get().getProfile();
+        if (profile == null) {
+            throw new RuntimeException("El usuario no tiene un perfil asociado.");
+        }
+
+        List<Availability> availabilities = aS.findByProfile(profile);
+
+        ModelMapper m = new ModelMapper();
+        return availabilities.stream()
+                .map(a -> m.map(a, AvailabilityDTO.class))
+                .collect(Collectors.toList());
     }
 }

@@ -3,6 +3,7 @@ package upc.helpwave.serviceimplements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upc.helpwave.entities.Availability;
+import upc.helpwave.entities.Profile;
 import upc.helpwave.repositories.AvailabilityRepository;
 import upc.helpwave.serviceinterfaces.IAvailabilityService;
 
@@ -35,5 +36,10 @@ public class AvailabilityServiceImplement implements IAvailabilityService {
     @Override
     public void insertAll(List<Availability> availabilities) {
         aR.saveAll(availabilities);
+    }
+
+    @Override
+    public List<Availability> findByProfile(Profile profile) {
+        return aR.findByProfile(profile);
     }
 }

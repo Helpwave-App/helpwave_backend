@@ -1,4 +1,5 @@
 package upc.helpwave.serviceinterfaces;
+import upc.helpwave.entities.Profile;
 import upc.helpwave.entities.SkillProfile;
 
 import java.util.List;
@@ -13,5 +14,7 @@ public interface ISkillProfileService {
     public List<SkillProfile> list();
 
     void insertAll(List<SkillProfile> skillProfiles);
+
+    List<SkillProfile> findByProfile(Profile profile);
 
 }

@@ -1,5 +1,6 @@
 package upc.helpwave.serviceinterfaces;
 import upc.helpwave.entities.Availability;
+import upc.helpwave.entities.Profile;
 
 import java.util.List;
 
@@ -13,5 +14,7 @@ public interface IAvailabilityService{
     public List<Availability> list();
 
     void insertAll(List<Availability> availabilities);
+
+    List<Availability> findByProfile(Profile profile);
 
 }
