@@ -3,11 +3,14 @@ package upc.helpwave.controllers;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+
+import upc.helpwave.dtos.RegisterResponseDTO;
 import upc.helpwave.dtos.UserDTO;
 import upc.helpwave.entities.User;
 import upc.helpwave.serviceinterfaces.IUserService;
@@ -25,10 +28,16 @@ public class UserController {
     private PasswordEncoder bcrypt;
 
     @PostMapping("/register")
-    public void register(@RequestBody UserDTO dto) {
+    public ResponseEntity<RegisterResponseDTO> register(@RequestBody UserDTO dto) {
         ModelMapper m = new ModelMapper();
         User u = m.map(dto, User.class);
         uS.insert(u);
+
+        int idUser = u.getIdUser();
+        int idProfile = u.getProfile() != null ? u.getProfile().getIdProfile() : 0;
+
+        RegisterResponseDTO response = new RegisterResponseDTO(idUser, idProfile, "Usuario registrado correctamente.");
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
