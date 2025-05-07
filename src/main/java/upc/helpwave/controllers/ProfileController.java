@@ -43,10 +43,11 @@ public class ProfileController {
         }).collect(Collectors.toList());
     }
 
-    @PutMapping
-    public void update(@RequestBody ProfileDTO dto) {
+    @PutMapping("/{id}")
+    public void update(@PathVariable("id") Integer id, @RequestBody ProfileDTO dto) {
         ModelMapper m = new ModelMapper();
-        Profile a = m.map(dto, Profile.class);
-        pS.insert(a);
+        Profile updatedProfile = m.map(dto, Profile.class);
+        updatedProfile.setIdProfile(id);
+        pS.insert(updatedProfile);
     }
 }

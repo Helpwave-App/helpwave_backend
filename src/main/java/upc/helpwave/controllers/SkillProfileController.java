@@ -84,7 +84,17 @@ public class SkillProfileController {
         SkillProfile a=m.map(dto,SkillProfile.class);
         spS.insert(a);
     }
+    @PutMapping("/profile/{id}")
+    public void updateByProfile(@PathVariable("id") Integer profileId, @RequestBody SkillProfileDTO dto) {
+        ModelMapper m = new ModelMapper();
+        SkillProfile skillProfile = m.map(dto, SkillProfile.class);
 
+        Profile profile = new Profile();
+        profile.setIdProfile(profileId);
+        skillProfile.setProfile(profile);
+
+        spS.insert(skillProfile);
+    }
     @GetMapping("/user/{idUser}")
     public List<SkillProfileDTO> listByUser(@PathVariable("idUser") int idUser) {
         Optional<User> userOpt = uR.findById(idUser);

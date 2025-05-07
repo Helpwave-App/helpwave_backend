@@ -7,9 +7,8 @@ import java.time.LocalDateTime;
 
 public class RequestDTO {
     private int idRequest;
-    private Profile profile;
-    private Skill skill;
-    private LocalDateTime dateRequest;
+    private int idProfile;
+    private int idSkill;
     private Boolean stateRequest;
 
     public int getIdRequest() {
@@ -20,35 +19,27 @@ public class RequestDTO {
         this.idRequest = idRequest;
     }
 
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
-    public Skill getSkill() {
-        return skill;
-    }
-
-    public void setSkill(Skill skill) {
-        this.skill = skill;
-    }
-
-    public LocalDateTime getDateRequest() {
-        return dateRequest;
-    }
-
-    public void setDateRequest(LocalDateTime dateRequest) {
-        this.dateRequest = dateRequest;
-    }
-
     public Boolean getStateRequest() {
         return stateRequest;
     }
 
     public void setStateRequest(Boolean stateRequest) {
         this.stateRequest = stateRequest;
+    }
+
+    public int getIdProfile() {
+        return idProfile;
+    }
+
+    public void setIdProfile(int idProfile) {
+        this.idProfile = idProfile;
+    }
+
+    public int getIdSkill() {
+        return idSkill;
+    }
+
+    public void setIdSkill(int idSkill) {
+        this.idSkill = idSkill;
     }
 }

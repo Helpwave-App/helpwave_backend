@@ -14,7 +14,6 @@ import upc.helpwave.dtos.UserDTO;
 import upc.helpwave.entities.User;
 import upc.helpwave.serviceinterfaces.IUserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
