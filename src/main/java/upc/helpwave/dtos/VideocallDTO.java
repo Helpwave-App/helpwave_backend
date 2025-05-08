@@ -4,14 +4,14 @@ import upc.helpwave.entities.Empairing;
 import java.time.LocalDateTime;
 
 public class VideocallDTO {
-    private int idVideocall;
-    private Empairing empairing;
+    //private int idVideocall;
+    //private Empairing empairing;
     private String token;
     private String channel;
-    private LocalDateTime startVideocall;
-    private LocalDateTime endVideocall;
+    //private LocalDateTime startVideocall;
+    //private LocalDateTime endVideocall;
 
-    public int getIdVideocall() {
+    /*public int getIdVideocall() {
         return idVideocall;
     }
 
@@ -26,7 +26,7 @@ public class VideocallDTO {
     public void setEmpairing(Empairing empairing) {
         this.empairing = empairing;
     }
-
+    */
     public String getToken() {
         return token;
     }
@@ -42,7 +42,7 @@ public class VideocallDTO {
     public void setChannel(String channel) {
         this.channel = channel;
     }
-
+    /*
     public LocalDateTime getStartVideocall() {
         return startVideocall;
     }
@@ -57,5 +57,11 @@ public class VideocallDTO {
 
     public void setEndVideocall(LocalDateTime endVideocall) {
         this.endVideocall = endVideocall;
+    }*/
+
+    public VideocallDTO(String token, String channel) {
+        this.token = token;
+        this.channel = channel;
     }
+    public VideocallDTO() {}
 }

@@ -73,7 +73,17 @@ public class AvailabilityController {
         Availability a=m.map(dto,Availability.class);
         aS.insert(a);
     }
+    @PutMapping("/profile/{id}")
+    public void updateByProfile(@PathVariable("id") Integer profileId, @RequestBody AvailabilityDTO dto) {
+        ModelMapper m = new ModelMapper();
+        Availability availability = m.map(dto, Availability.class);
 
+        Profile profile = new Profile();
+        profile.setIdProfile(profileId);
+        availability.setProfile(profile);
+
+        aS.insert(availability);
+    }
     @GetMapping("/user/{idUser}")
     public List<AvailabilityDTO> listByUser(@PathVariable("idUser") int idUser) {
         Optional<User> userOpt = uR.findById(idUser);
