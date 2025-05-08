@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+
 import upc.helpwave.dtos.RegisterResponseDTO;
 import upc.helpwave.dtos.UserDTO;
 import upc.helpwave.entities.User;
