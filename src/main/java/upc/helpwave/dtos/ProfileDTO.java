@@ -11,6 +11,9 @@ public class ProfileDTO {
     private String lastName;
     private LocalDate birthDate;
     private Double scoreProfile;
+    private String email;
+    private String phoneNumber;
+    private String photoUrl;
 
     public int getIdProfile() {
         return idProfile;
@@ -58,5 +61,29 @@ public class ProfileDTO {
 
     public void setScoreProfile(Double scoreProfile) {
         this.scoreProfile = scoreProfile;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
