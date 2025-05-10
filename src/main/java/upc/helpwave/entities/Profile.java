@@ -26,6 +26,15 @@ public class Profile {
     @Column(name = "scoreProfile")
     private Double scoreProfile;
 
+    @Column(name = "email", length = 200)
+    private String email;
+
+    @Column(name = "phoneNumber", length = 9)
+    private String phoneNumber;
+
+    @Column(name = "photoUrl", length = 500)
+    private String photoUrl;
+
     public Profile() {
     }
 
@@ -43,6 +52,19 @@ public class Profile {
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.scoreProfile = scoreProfile;
+    }
+
+    public Profile(int idProfile, Level level, String name, String lastName, LocalDate birthDate, Double scoreProfile,
+            String email, String phoneNumber, String photoUrl) {
+        this.idProfile = idProfile;
+        this.level = level;
+        this.name = name;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.scoreProfile = scoreProfile;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.photoUrl = photoUrl;
     }
 
     public int getIdProfile() {
@@ -91,5 +113,29 @@ public class Profile {
 
     public void setScoreProfile(Double scoreProfile) {
         this.scoreProfile = scoreProfile;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

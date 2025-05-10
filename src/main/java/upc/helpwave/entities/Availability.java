@@ -1,5 +1,7 @@
 package upc.helpwave.entities;
 
+import java.time.LocalTime;
+
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
