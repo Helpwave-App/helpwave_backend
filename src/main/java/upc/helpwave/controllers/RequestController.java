@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import upc.helpwave.dtos.MatchedProfileDTO;
 import upc.helpwave.dtos.RequestDTO;
 import upc.helpwave.entities.Profile;
 import upc.helpwave.entities.Request;
@@ -56,7 +57,7 @@ public class RequestController {
         rS.insert(a);
     }
     @PostMapping
-    public ResponseEntity<List<Integer>> register(@RequestBody RequestDTO dto) {
+    public ResponseEntity<List<MatchedProfileDTO>> register(@RequestBody RequestDTO dto) {
         Optional<Profile> profileOpt = pR.findById(dto.getIdProfile());
         Optional<Skill> skillOpt = sR.findById(dto.getIdSkill());
 
@@ -70,13 +71,8 @@ public class RequestController {
         r.setDateRequest(LocalDateTime.now());
         r.setStateRequest(dto.getStateRequest());
 
-        rS.insert(r);
-
-        List<Profile> matchedProfiles = eS.generateEmpairings(r);
-        List<Integer> matchedProfileIds = matchedProfiles.stream()
-                .map(Profile::getIdProfile)
-                .collect(Collectors.toList());
-
+        Request savedRequest = eS.insert(r);
+        List<MatchedProfileDTO> matchedProfileIds = eS.generateEmpairings(savedRequest);
         return ResponseEntity.ok(matchedProfileIds);
     }
 }

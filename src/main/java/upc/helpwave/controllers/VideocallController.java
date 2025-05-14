@@ -2,12 +2,18 @@ package upc.helpwave.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import upc.helpwave.dtos.SkillProfileDTO;
 import upc.helpwave.dtos.VideocallDTO;
+import upc.helpwave.entities.Empairing;
+import upc.helpwave.entities.Profile;
+import upc.helpwave.entities.SkillProfile;
 import upc.helpwave.entities.Videocall;
 import upc.helpwave.serviceinterfaces.IVideocallService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -15,6 +21,20 @@ import java.util.stream.Collectors;
 public class VideocallController {
     @Autowired
     private IVideocallService vS;
+    @GetMapping("/empairings/{id}")
+    public ResponseEntity<VideocallDTO> findVideocallByEmpairingId(@PathVariable("id") Integer idEmpairing) {
+        Optional<Videocall> videoOpt = vS.findByEmpairingId(idEmpairing);
+
+        if (!videoOpt.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        ModelMapper m = new ModelMapper();
+        VideocallDTO dto = m.map(videoOpt.get(), VideocallDTO.class);
+
+        return ResponseEntity.ok(dto);
+    }
+
     @PostMapping
     public void register(@RequestBody VideocallDTO dto){
         ModelMapper m=new ModelMapper();

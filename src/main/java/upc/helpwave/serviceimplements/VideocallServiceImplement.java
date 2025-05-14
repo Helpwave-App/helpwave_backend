@@ -11,6 +11,7 @@ import upc.helpwave.serviceinterfaces.IVideocallService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -64,9 +65,14 @@ public class VideocallServiceImplement implements IVideocallService {
         videocall.setChannel(channelName);
         videocall.setToken(token);
         videocall.setStartVideocall(LocalDateTime.now());
-        videocall.setEndVideocall(LocalDateTime.now().plusHours(1)); // Duración de 1 hora
+        videocall.setEndVideocall(LocalDateTime.now().plusHours(1));
 
         return vR.save(videocall);
     }
-
+    @Override
+    public Optional<Videocall> findByEmpairingId(Integer idEmpairing) {
+        Empairing empairing = new Empairing();
+        empairing.setIdEmpairing(idEmpairing);
+        return vR.findByEmpairing(empairing);
+    }
 }

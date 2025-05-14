@@ -35,6 +35,17 @@ public class Profile {
     @Column(name = "photoUrl", length = 500)
     private String photoUrl;
 
+    @OneToOne(mappedBy = "profile")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Profile() {
     }
 
