@@ -66,6 +66,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/skillProfiles/batch").permitAll()
                         .requestMatchers(HttpMethod.POST, "/availabilities/batch").permitAll()
                         .requestMatchers(HttpMethod.POST, "/notification").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/devices").permitAll()
 
                         // Permitir GET en estas rutas
                         .requestMatchers(HttpMethod.GET, "/user/check-username").permitAll()
