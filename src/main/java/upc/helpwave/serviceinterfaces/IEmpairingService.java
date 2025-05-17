@@ -12,7 +12,7 @@ public interface IEmpairingService {
     public void delete(Integer idEmpairing);
     public Empairing listId(Integer idEmpairing);
     List<Empairing> list();
-    List<MatchedProfileDTO> generateEmpairings(Request request);
+    List<String> generateEmpairings(Request request);
     Request insert(Request request);
     public Videocall acceptEmpairing(int empairingId);
 }

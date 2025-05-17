@@ -7,6 +7,7 @@ import upc.helpwave.entities.*;
 import upc.helpwave.repositories.AvailabilityRepository;
 import upc.helpwave.repositories.EmpairingRepository;
 import upc.helpwave.repositories.RequestRepository;
+import upc.helpwave.repositories.VideocallRepository;
 import upc.helpwave.serviceinterfaces.IEmpairingService;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,8 @@ public class EmpairingServiceImplement implements IEmpairingService {
     private VideocallServiceImplement vS;
     @Autowired
     private RequestRepository rR;
+    @Autowired
+    private VideocallRepository vR;
 
     @Override
     public void insert(Empairing empairing) {
@@ -48,7 +51,7 @@ public class EmpairingServiceImplement implements IEmpairingService {
     }
 
     @Override
-    public List<MatchedProfileDTO> generateEmpairings(Request request) {
+    public List<String> generateEmpairings(Request request) {
         LocalDateTime requestDateTime = request.getDateRequest();
         String day = String.valueOf(requestDateTime.getDayOfWeek().getValue());
         LocalTime time = requestDateTime.toLocalTime();
@@ -59,12 +62,13 @@ public class EmpairingServiceImplement implements IEmpairingService {
 
         List<Profile> remaining = allAvailable.stream()
                 .filter(p -> !usedProfileIds.contains(p.getIdProfile()))
+                .filter(p -> vR.findActiveVideocallsByProfile(p.getIdProfile()).isEmpty()) // Que no estén en videollamada
                 .collect(Collectors.toList());
 
-        Collections.shuffle(remaining);
+        Collections.shuffle(remaining); // Aleatorio
 
         int batchSize = 5;
-        List<MatchedProfileDTO> matchedProfiles = new ArrayList<>();
+        List<String> deviceTokensToNotify = new ArrayList<>();
 
         for (int i = 0; i < Math.min(batchSize, remaining.size()); i++) {
             Profile profile = remaining.get(i);
@@ -75,15 +79,14 @@ public class EmpairingServiceImplement implements IEmpairingService {
             empairing.setStateEmpairing(false);
             eR.save(empairing);
 
-            User user = profile.getUser();
-            List<String> tokens = user.getDevices().stream()
+            List<String> tokens = profile.getUser().getDevices().stream()
                     .map(Device::getTokenDevice)
                     .collect(Collectors.toList());
 
-            matchedProfiles.add(new MatchedProfileDTO(profile.getIdProfile(), tokens));
+            deviceTokensToNotify.addAll(tokens);
         }
 
-        return matchedProfiles;
+        return deviceTokensToNotify;
     }
 
 

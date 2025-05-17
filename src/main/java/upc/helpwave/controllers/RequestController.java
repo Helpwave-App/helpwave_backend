@@ -5,17 +5,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.MatchedProfileDTO;
+import upc.helpwave.dtos.NotificationMessageDTO;
 import upc.helpwave.dtos.RequestDTO;
 import upc.helpwave.entities.Profile;
 import upc.helpwave.entities.Request;
 import upc.helpwave.entities.Skill;
 import upc.helpwave.repositories.ProfileRepository;
 import upc.helpwave.repositories.SkillRepository;
+import upc.helpwave.serviceimplements.FirebaseMessagingServiceImplement;
 import upc.helpwave.serviceinterfaces.IEmpairingService;
 import upc.helpwave.serviceinterfaces.IRequestService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,6 +33,8 @@ public class RequestController {
     private ProfileRepository pR;
     @Autowired
     private SkillRepository sR;
+    @Autowired
+    private FirebaseMessagingServiceImplement fMS;
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Integer id)
@@ -57,7 +62,7 @@ public class RequestController {
         rS.insert(a);
     }
     @PostMapping
-    public ResponseEntity<List<MatchedProfileDTO>> register(@RequestBody RequestDTO dto) {
+    public ResponseEntity<List<String>> register(@RequestBody RequestDTO dto) {
         Optional<Profile> profileOpt = pR.findById(dto.getIdProfile());
         Optional<Skill> skillOpt = sR.findById(dto.getIdSkill());
 
@@ -72,7 +77,18 @@ public class RequestController {
         r.setStateRequest(dto.getStateRequest());
 
         Request savedRequest = eS.insert(r);
-        List<MatchedProfileDTO> matchedProfileIds = eS.generateEmpairings(savedRequest);
-        return ResponseEntity.ok(matchedProfileIds);
+        List<String> tokens = eS.generateEmpairings(savedRequest);
+
+        for (String token : tokens) {
+            NotificationMessageDTO message = new NotificationMessageDTO();
+            message.setTokenDevice(token);
+            message.setTitle("Nueva solicitud de ayuda");
+            message.setBody("Hay una solicitud de videollamada pendiente que puedes aceptar.");
+            message.setImage(null);
+            message.setData(Map.of("type", "request", "idRequest", String.valueOf(savedRequest.getIdRequest())));
+            fMS.sendNotificationByToken(message);
+        }
+
+        return ResponseEntity.ok(tokens);
     }
 }
