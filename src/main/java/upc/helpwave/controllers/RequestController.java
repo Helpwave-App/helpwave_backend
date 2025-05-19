@@ -73,7 +73,7 @@ public class RequestController {
         Request r = new Request();
         r.setProfile(profileOpt.get());
         r.setSkill(skillOpt.get());
-        r.setDateRequest(LocalDateTime.now());
+        r.setDateRequest(LocalDateTime.now(ZoneId.of("America/Lima")));
         r.setStateRequest(dto.getStateRequest());
 
         Request savedRequest = eS.insert(r);
