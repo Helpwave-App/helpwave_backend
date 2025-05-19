@@ -38,7 +38,7 @@ public class DeviceController {
     public void register(@RequestBody DeviceDTO dto) {
         ModelMapper m = new ModelMapper();
         Device r = m.map(dto, Device.class);
-        r.setRegistrationDate(LocalDateTime.now());
+        r.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
         dS.insert(r);
     }
 
@@ -46,7 +46,7 @@ public class DeviceController {
     public void update(@RequestBody DeviceDTO dto) {
         ModelMapper m = new ModelMapper();
         Device a = m.map(dto, Device.class);
-        a.setRegistrationDate(LocalDateTime.now());
+        a.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
         dS.insert(a);
     }
 }
