@@ -64,8 +64,8 @@ public class VideocallServiceImplement implements IVideocallService {
         videocall.setEmpairing(empairing);
         videocall.setChannel(channelName);
         videocall.setToken(token);
-        videocall.setStartVideocall(LocalDateTime.now());
-        videocall.setEndVideocall(LocalDateTime.now().plusHours(1));
+        videocall.setStartVideocall(LocalDateTime.now(ZoneId.of("America/Lima")));
+        videocall.setEndVideocall(LocalDateTime.now(ZoneId.of("America/Lima")).plusHours(1));
 
         return vR.save(videocall);
     }
