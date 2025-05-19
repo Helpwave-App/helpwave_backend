@@ -6,7 +6,7 @@ import java.util.List;
 public interface IDeviceService {
     public void insert(Device device);
 
-    public void delete(Integer idDevice);
+    public void delete(String tokenDevice);
 
     public Device listId(Integer idDevice);
 
