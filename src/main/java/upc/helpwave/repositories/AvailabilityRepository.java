@@ -17,9 +17,9 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Inte
             "JOIN SkillProfile sp ON sp.profile = a.profile " +
             "WHERE a.day = :day " +
             "AND :time BETWEEN a.hourStart AND a.hourEnd " +
-            "AND sp.skill.idSkill = :skillId")
+            "AND sp.skill.idSkill = :idSkill")
     List<Profile> findProfilesAvailableAtWithSkill(@Param("day") String day,
                                                    @Param("time") LocalTime time,
-                                                   @Param("skillId") Integer skillId);
+                                                   @Param("idSkill") Integer idSkill);
 }
 
