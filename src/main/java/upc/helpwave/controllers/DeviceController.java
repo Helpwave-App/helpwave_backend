@@ -17,10 +17,9 @@ import java.util.stream.Collectors;
 public class DeviceController {
     @Autowired
     private IDeviceService dS;
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Integer id)
-    {
-        dS.delete(id);
+    @DeleteMapping("/{token}")
+    public void delete(@PathVariable("token") String token) {
+        dS.delete(token);
     }
     @GetMapping("/{id}")
     public DeviceDTO listId(@PathVariable("id")Integer id){
