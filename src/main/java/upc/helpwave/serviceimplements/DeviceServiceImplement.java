@@ -7,6 +7,7 @@ import upc.helpwave.repositories.DeviceRepository;
 import upc.helpwave.serviceinterfaces.IDeviceService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeviceServiceImplement implements IDeviceService {
@@ -19,9 +20,16 @@ public class DeviceServiceImplement implements IDeviceService {
     }
 
     @Override
-    public void delete(Integer idDevice) {
-        dR.deleteById(idDevice);
+    public void delete(String tokenDevice) {
+        Optional<Device> deviceOpt = dR.findByTokenDevice(tokenDevice);
+        if (deviceOpt.isPresent()) {
+            dR.delete(deviceOpt.get());
+            System.out.println("Dispositivo eliminado con token: " + tokenDevice);
+        } else {
+            System.out.println("No se encontró el token: " + tokenDevice);
+        }
     }
+
 
     @Override
     public Device listId(Integer idDevice) {
