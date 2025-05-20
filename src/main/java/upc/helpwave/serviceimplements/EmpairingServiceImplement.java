@@ -2,7 +2,6 @@ package upc.helpwave.serviceimplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import upc.helpwave.dtos.MatchedProfileDTO;
 import upc.helpwave.entities.*;
 import upc.helpwave.repositories.AvailabilityRepository;
 import upc.helpwave.repositories.EmpairingRepository;
@@ -51,24 +50,23 @@ public class EmpairingServiceImplement implements IEmpairingService {
     }
 
     @Override
-    public List<String> generateEmpairings(Request request) {
+    public List<Empairing> generateEmpairings(Request request) {
         LocalDateTime requestDateTime = request.getDateRequest();
         String day = String.valueOf(requestDateTime.getDayOfWeek().getValue());
         LocalTime time = requestDateTime.toLocalTime();
 
         List<Profile> allAvailable = aR.findProfilesAvailableAtWithSkill(day, time, request.getSkill().getIdSkill());
-
         List<Integer> usedProfileIds = eR.findProfileIdsByIdRequest(request.getIdRequest());
 
         List<Profile> remaining = allAvailable.stream()
                 .filter(p -> !usedProfileIds.contains(p.getIdProfile()))
-                .filter(p -> vR.findActiveVideocallsByProfile(p.getIdProfile()).isEmpty()) // Que no estén en videollamada
+                .filter(p -> vR.findActiveVideocallsByProfile(p.getIdProfile()).isEmpty())
                 .collect(Collectors.toList());
 
-        Collections.shuffle(remaining); // Aleatorio
+        Collections.shuffle(remaining);
 
         int batchSize = 5;
-        List<String> deviceTokensToNotify = new ArrayList<>();
+        List<Empairing> createdEmpairings = new ArrayList<>();
 
         for (int i = 0; i < Math.min(batchSize, remaining.size()); i++) {
             Profile profile = remaining.get(i);
@@ -79,14 +77,10 @@ public class EmpairingServiceImplement implements IEmpairingService {
             empairing.setStateEmpairing(false);
             eR.save(empairing);
 
-            List<String> tokens = profile.getUser().getDevices().stream()
-                    .map(Device::getTokenDevice)
-                    .collect(Collectors.toList());
-
-            deviceTokensToNotify.addAll(tokens);
+            createdEmpairings.add(empairing);
         }
 
-        return deviceTokensToNotify;
+        return createdEmpairings;
     }
 
 
