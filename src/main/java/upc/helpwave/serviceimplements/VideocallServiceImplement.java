@@ -48,7 +48,7 @@ public class VideocallServiceImplement implements IVideocallService {
 
     public Videocall createVideocall(Empairing empairing) {
         String channelName = "call_" + empairing.getIdEmpairing() + "_" + UUID.randomUUID();
-        int uid = empairing.getRequest().getIdRequest();
+        int uid = 0;
 
         RtcTokenBuilder2 tokenBuilder = new RtcTokenBuilder2();
         String token = tokenBuilder.buildTokenWithUid(
@@ -58,8 +58,7 @@ public class VideocallServiceImplement implements IVideocallService {
                 uid,
                 RtcTokenBuilder2.Role.ROLE_PUBLISHER,
                 3600,
-                3600
-        );
+                3600);
 
         Videocall videocall = new Videocall();
         videocall.setEmpairing(empairing);
@@ -70,6 +69,7 @@ public class VideocallServiceImplement implements IVideocallService {
 
         return vR.save(videocall);
     }
+
     @Override
     public Optional<Videocall> findByEmpairingId(Integer idEmpairing) {
         Empairing empairing = new Empairing();
