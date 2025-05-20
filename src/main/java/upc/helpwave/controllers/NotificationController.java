@@ -14,11 +14,4 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/notification")
 public class NotificationController {
 
-    @Autowired
-    IFirebaseMessagingService fMS;
-
-    @PostMapping
-    public String sendNotificationByToken(@RequestBody NotificationMessageDTO notificationMessageDTO) {
-        return fMS.sendNotificationByToken(notificationMessageDTO);
-    }
 }
