@@ -1,6 +1,6 @@
 package upc.helpwave.serviceimplements;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.google.firebase.FirebaseApp;
 import org.springframework.stereotype.Service;
 
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -12,29 +12,26 @@ import upc.helpwave.dtos.NotificationMessageDTO;
 import upc.helpwave.serviceinterfaces.IFirebaseMessagingService;
 
 @Service
-public class FirebaseMessagingServiceImplement implements IFirebaseMessagingService {
-
-    @Autowired
-    private FirebaseMessaging firebaseMessaging;
-
-    public String sendNotificationByToken(NotificationMessageDTO notificationMessageDTO) {
+public class FirebaseMessagingServiceImplement implements IFirebaseMessagingService{
+    public String sendNotificationByToken(NotificationMessageDTO dto) {
         Notification notification = Notification.builder()
-                .setTitle(notificationMessageDTO.getTitle())
-                .setBody(notificationMessageDTO.getBody())
-                .setImage(notificationMessageDTO.getImage())
+                .setTitle(dto.getTitle())
+                .setBody(dto.getBody())
                 .build();
 
-        Message mesagge = Message.builder().setToken(notificationMessageDTO.getTokenDevice())
+        Message message = Message.builder()
+                .setToken(dto.getTokenDevice())
                 .setNotification(notification)
-                .putAllData(notificationMessageDTO.getData())
+                .putAllData(dto.getData())
                 .build();
 
         try {
-            firebaseMessaging.send(mesagge);
-            return "Notification sent successfully";
-        } catch (FirebaseMessagingException e) {
-            e.printStackTrace();
-            return "Error sending notification: " + e.getMessage();
+                String response = FirebaseMessaging.getInstance(FirebaseApp.getInstance("my-app"))
+                        .send(message);
+                return response;
+            } catch (FirebaseMessagingException e) {
+                e.printStackTrace();
+                return null;
         }
     }
 }
