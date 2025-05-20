@@ -4,12 +4,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import upc.helpwave.dtos.MatchedProfileDTO;
 import upc.helpwave.dtos.NotificationMessageDTO;
 import upc.helpwave.dtos.RequestDTO;
-import upc.helpwave.entities.Profile;
-import upc.helpwave.entities.Request;
-import upc.helpwave.entities.Skill;
+import upc.helpwave.entities.*;
 import upc.helpwave.repositories.ProfileRepository;
 import upc.helpwave.repositories.SkillRepository;
 import upc.helpwave.serviceimplements.FirebaseMessagingServiceImplement;
@@ -18,9 +15,7 @@ import upc.helpwave.serviceinterfaces.IRequestService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -78,16 +73,29 @@ public class RequestController {
         r.setStateRequest(dto.getStateRequest());
 
         Request savedRequest = eS.insert(r);
-        List<String> tokens = eS.generateEmpairings(savedRequest);
+        List<Empairing> empairings = eS.generateEmpairings(savedRequest);
+        List<String> tokens = new ArrayList<>();
 
-        for (String token : tokens) {
-            NotificationMessageDTO message = new NotificationMessageDTO();
-            message.setTokenDevice(token);
-            message.setTitle("Nueva solicitud de ayuda");
-            message.setBody("Hay una solicitud de videollamada pendiente que puedes aceptar.");
-            message.setImage(null);
-            message.setData(Map.of("type", "request", "idRequest", String.valueOf(savedRequest.getIdRequest())));
-            fMS.sendNotificationByToken(message);
+        for (Empairing empairing : empairings) {
+            Profile profile = empairing.getProfile();
+            String skillName = savedRequest.getSkill().getSkillDesc();
+
+            for (Device device : profile.getUser().getDevices()) {
+                NotificationMessageDTO message = new NotificationMessageDTO();
+                message.setTokenDevice(device.getTokenDevice());
+                message.setTitle("Nueva solicitud de ayuda");
+                message.setBody("Alguien necesita asistencia");
+
+                Map<String, String> data = new HashMap<>();
+                data.put("type", "help_request");
+                data.put("idEmpairing", String.valueOf(empairing.getIdEmpairing()));
+                data.put("skill", skillName);
+
+                message.setData(data);
+
+                fMS.sendNotificationByToken(message);
+                tokens.add(device.getTokenDevice());
+            }
         }
 
         return ResponseEntity.ok(tokens);
