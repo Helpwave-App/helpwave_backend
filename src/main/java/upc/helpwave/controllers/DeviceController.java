@@ -2,8 +2,10 @@ package upc.helpwave.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.DeviceDTO;
+import upc.helpwave.dtos.DeviceUpsertDTO;
 import upc.helpwave.entities.Device;
 import upc.helpwave.serviceinterfaces.IDeviceService;
 
@@ -41,12 +43,20 @@ public class DeviceController {
         r.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
         dS.insert(r);
     }
-
     @PutMapping
     public void update(@RequestBody DeviceDTO dto) {
         ModelMapper m = new ModelMapper();
         Device a = m.map(dto, Device.class);
         a.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
         dS.insert(a);
+    }
+    @PostMapping("/upsert")
+    public ResponseEntity<String> upsertDevice(@RequestBody DeviceUpsertDTO dto) {
+        try {
+            dS.upsert(dto);
+            return ResponseEntity.ok("Device procesado correctamente");
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 }
