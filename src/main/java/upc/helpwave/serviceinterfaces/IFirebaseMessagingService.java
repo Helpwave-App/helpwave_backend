@@ -4,6 +4,6 @@ import upc.helpwave.dtos.NotificationMessageDTO;
 
 public interface IFirebaseMessagingService {
 
-    public String sendNotificationByToken(NotificationMessageDTO notificationMessageDTO);
+    public String sendNotificationByToken(NotificationMessageDTO dto);
 
 }
