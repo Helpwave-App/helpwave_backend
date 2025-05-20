@@ -1,6 +1,5 @@
 package upc.helpwave.serviceinterfaces;
 
-import upc.helpwave.dtos.MatchedProfileDTO;
 import upc.helpwave.entities.Empairing;
 import upc.helpwave.entities.Request;
 import upc.helpwave.entities.Videocall;
@@ -12,7 +11,7 @@ public interface IEmpairingService {
     public void delete(Integer idEmpairing);
     public Empairing listId(Integer idEmpairing);
     List<Empairing> list();
-    List<String> generateEmpairings(Request request);
+    public List<Empairing> generateEmpairings(Request request);
     Request insert(Request request);
     public Videocall acceptEmpairing(int empairingId);
 }
