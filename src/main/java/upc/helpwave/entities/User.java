@@ -1,4 +1,5 @@
 package upc.helpwave.entities;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -6,20 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idUser;
+    private Integer idUser;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idProfile", referencedColumnName = "idProfile")
     private Profile profile;
 
-    @Column(name = "username",nullable = false, length = 30, unique = true)
+    @Column(name = "username", nullable = false, length = 30, unique = true)
     private String username;
 
-    @Column(name = "password",nullable = false, length = 200)
+    @Column(name = "password", nullable = false, length = 200)
     private String password;
 
     @Column(name = "state", nullable = false, length = 1)
@@ -41,11 +42,11 @@ public class User {
         this.devices = devices;
     }
 
-    public int getIdUser() {
+    public Integer getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(int idUser) {
+    public void setIdUser(Integer idUser) {
         this.idUser = idUser;
     }
 
@@ -81,9 +82,13 @@ public class User {
         this.state = state;
     }
 
-    public Role getRole() { return role; }
+    public Role getRole() {
+        return role;
+    }
 
-    public void setRole(Role role) { this.role = role; }
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public User(int idUser, Profile profile, String username, String password, Boolean state, Role role) {
         this.idUser = idUser;

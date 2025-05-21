@@ -30,9 +30,22 @@ public class DeviceServiceImplement implements IDeviceService {
             } else {
                 throw new RuntimeException("No se encontró el dispositivo con el token: " + dto.getOldTokenDevice());
             }
-        } else if (dto.getIdUser() != null && dto.getTokenDevice() != null) {
+        } else if (dto.getIdUser() != null && dto.getNewTokenDevice() != null) {
+            Optional<Device> existing = dR.findByTokenDevice(dto.getNewTokenDevice());
+            if (existing.isPresent()) {
+                Device device = existing.get();
+                if (device.getUser() != null && device.getUser().getIdUser().equals(dto.getIdUser())) {
+                    device.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
+                    dR.save(device);
+                    return;
+                } else {
+                    throw new RuntimeException("Este token ya está asociado a otro usuario.");
+                }
+
+            }
+
             Device newDevice = new Device();
-            newDevice.setTokenDevice(dto.getTokenDevice());
+            newDevice.setTokenDevice(dto.getNewTokenDevice());
             newDevice.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
 
             User user = new User();
@@ -60,7 +73,6 @@ public class DeviceServiceImplement implements IDeviceService {
             System.out.println("No se encontró el token: " + tokenDevice);
         }
     }
-
 
     @Override
     public Device listId(Integer idDevice) {
