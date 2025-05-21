@@ -87,7 +87,7 @@ public class EmpairingController {
                         "type", "videocall_start",
                         "channel", videocall.getChannel(),
                         "token", videocall.getToken()));
-                fMS.sendNotificationByToken(message);
+                fMS.sendSilentNotificationByToken(message);
             }
 
             VideocallDTO dto = new VideocallDTO(videocall.getToken(), videocall.getChannel());
