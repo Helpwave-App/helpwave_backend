@@ -24,15 +24,27 @@ public class Request {
     @Column(name = "stateRequest", nullable = false)
     private Boolean stateRequest;
 
+    @Column(name = "tokenDevice")
+    private String tokenDevice;
+
     public Request() {
     }
 
-    public Request(int idRequest, Profile profile, Skill skill, LocalDateTime dateRequest, Boolean stateRequest) {
+    public Request(int idRequest, Profile profile, Skill skill, LocalDateTime dateRequest, Boolean stateRequest, String tokenDevice) {
         this.idRequest = idRequest;
         this.profile = profile;
         this.skill = skill;
         this.dateRequest = dateRequest;
         this.stateRequest = stateRequest;
+        this.tokenDevice = tokenDevice;
+    }
+
+    public String getTokenDevice() {
+        return tokenDevice;
+    }
+
+    public void setTokenDevice(String tokenDevice) {
+        this.tokenDevice = tokenDevice;
     }
 
     public int getIdRequest() {
