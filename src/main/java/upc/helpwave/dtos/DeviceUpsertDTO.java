@@ -2,7 +2,6 @@ package upc.helpwave.dtos;
 
 public class DeviceUpsertDTO {
     private Integer idUser;
-    private String tokenDevice;
     private String oldTokenDevice;
     private String newTokenDevice;
 
@@ -12,14 +11,6 @@ public class DeviceUpsertDTO {
 
     public void setIdUser(Integer idUser) {
         this.idUser = idUser;
-    }
-
-    public String getTokenDevice() {
-        return tokenDevice;
-    }
-
-    public void setTokenDevice(String tokenDevice) {
-        this.tokenDevice = tokenDevice;
     }
 
     public String getOldTokenDevice() {
