@@ -1,15 +1,19 @@
 package upc.helpwave.dtos;
 
-import upc.helpwave.entities.Profile;
-import upc.helpwave.entities.Skill;
-
-import java.time.LocalDateTime;
-
 public class RequestDTO {
     private int idRequest;
     private int idProfile;
     private int idSkill;
     private Boolean stateRequest;
+    private String tokenDevice;
+
+    public String getTokenDevice() {
+        return tokenDevice;
+    }
+
+    public void setTokenDevice(String tokenDevice) {
+        this.tokenDevice = tokenDevice;
+    }
 
     public int getIdRequest() {
         return idRequest;
