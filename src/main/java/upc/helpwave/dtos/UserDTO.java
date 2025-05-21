@@ -5,7 +5,7 @@ import upc.helpwave.entities.Role;
 import java.util.List;
 
 public class UserDTO {
-    private int idUser;
+    private Integer idUser;
     private Profile profile;
     private String username;
     private String password;
@@ -21,11 +21,11 @@ public class UserDTO {
         this.idRole = role;
     }
 
-    public int getIdUser() {
+    public Integer getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(int idUser) {
+    public void setIdUser(Integer idUser) {
         this.idUser = idUser;
     }
 
