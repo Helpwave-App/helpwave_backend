@@ -9,7 +9,6 @@ import upc.helpwave.dtos.NotificationMessageDTO;
 import upc.helpwave.dtos.VideocallDTO;
 import upc.helpwave.entities.Empairing;
 import upc.helpwave.entities.Request;
-import upc.helpwave.entities.User;
 import upc.helpwave.entities.Videocall;
 import upc.helpwave.serviceimplements.EmpairingServiceImplement;
 import upc.helpwave.serviceimplements.FirebaseMessagingServiceImplement;
@@ -70,12 +69,8 @@ public class EmpairingController {
         if (videocall != null) {
             Empairing empairing = eS.listId(empairingId);
             Request request = empairing.getRequest();
-            User user = request.getProfile().getUser();
 
-            String tokenDevice = null;
-            if (user != null && user.getDevices() != null && !user.getDevices().isEmpty()) {
-                tokenDevice = user.getDevices().get(0).getTokenDevice();
-            }
+            String tokenDevice = request.getTokenDevice();
 
             if (tokenDevice != null && !tokenDevice.isEmpty()) {
                 NotificationMessageDTO message = new NotificationMessageDTO();
@@ -96,5 +91,4 @@ public class EmpairingController {
             return ResponseEntity.notFound().build();
         }
     }
-
 }
