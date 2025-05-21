@@ -34,4 +34,18 @@ public class FirebaseMessagingServiceImplement implements IFirebaseMessagingServ
                 return null;
         }
     }
+    public String sendSilentNotificationByToken(NotificationMessageDTO dto) {
+        Message message = Message.builder()
+                .setToken(dto.getTokenDevice())
+                .putAllData(dto.getData())
+                .build();
+
+        try {
+            return FirebaseMessaging.getInstance(FirebaseApp.getInstance("my-app"))
+                    .send(message);
+        } catch (FirebaseMessagingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
