@@ -33,30 +33,32 @@ public class RequestController {
     private FirebaseMessagingServiceImplement fMS;
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Integer id)
-    {
+    public void delete(@PathVariable("id") Integer id) {
         rS.delete(id);
     }
 
     @GetMapping("/{id}")
-    public RequestDTO listId(@PathVariable("id")Integer id){
-        ModelMapper m=new ModelMapper();
-        RequestDTO dto=m.map(rS.listId(id),RequestDTO.class);
+    public RequestDTO listId(@PathVariable("id") Integer id) {
+        ModelMapper m = new ModelMapper();
+        RequestDTO dto = m.map(rS.listId(id), RequestDTO.class);
         return dto;
     }
+
     @GetMapping
-    public List<RequestDTO> list(){
-        return rS.list().stream().map(x->{
-            ModelMapper m=new ModelMapper();
-            return m.map(x,RequestDTO.class);
+    public List<RequestDTO> list() {
+        return rS.list().stream().map(x -> {
+            ModelMapper m = new ModelMapper();
+            return m.map(x, RequestDTO.class);
         }).collect(Collectors.toList());
     }
+
     @PutMapping
     public void update(@RequestBody RequestDTO dto) {
         ModelMapper m = new ModelMapper();
-        Request a=m.map(dto,Request.class);
+        Request a = m.map(dto, Request.class);
         rS.insert(a);
     }
+
     @PostMapping
     public ResponseEntity<List<String>> register(@RequestBody RequestDTO dto) {
         Optional<Profile> profileOpt = pR.findById(dto.getIdProfile());
@@ -68,10 +70,11 @@ public class RequestController {
 
         Request r = new Request();
         r.setProfile(profileOpt.get());
+        r.setTokenDevice(dto.getTokenDevice());
         r.setSkill(skillOpt.get());
         r.setDateRequest(LocalDateTime.now(ZoneId.of("America/Lima")));
         r.setStateRequest(dto.getStateRequest());
-        
+
         Request savedRequest = eS.insert(r);
         List<Empairing> empairings = eS.generateEmpairings(savedRequest);
         List<String> tokens = new ArrayList<>();
