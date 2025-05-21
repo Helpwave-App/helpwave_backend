@@ -11,7 +11,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idUser;
+    private int idUser;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idProfile", referencedColumnName = "idProfile")
@@ -42,11 +42,11 @@ public class User {
         this.devices = devices;
     }
 
-    public Integer getIdUser() {
+    public int getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Integer idUser) {
+    public void setIdUser(int idUser) {
         this.idUser = idUser;
     }
 
