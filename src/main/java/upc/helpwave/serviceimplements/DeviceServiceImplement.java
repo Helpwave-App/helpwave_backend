@@ -34,7 +34,7 @@ public class DeviceServiceImplement implements IDeviceService {
             Optional<Device> existing = dR.findByTokenDevice(dto.getNewTokenDevice());
             if (existing.isPresent()) {
                 Device device = existing.get();
-                if (device.getUser() != null && device.getUser().getIdUser().equals(dto.getIdUser())) {
+                if (device.getUser() != null && device.getUser().getIdUser() == dto.getIdUser()) {
                     device.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
                     dR.save(device);
                     return;
