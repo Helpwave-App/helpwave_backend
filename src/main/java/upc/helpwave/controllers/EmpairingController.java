@@ -20,6 +20,7 @@ import upc.helpwave.serviceinterfaces.IVideocallService;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/empairings")
 public class EmpairingController {
@@ -33,37 +34,41 @@ public class EmpairingController {
     private FirebaseMessagingServiceImplement fMS;
     @Autowired
     private IRequestService rS;
+
     @PostMapping
-    public void register(@RequestBody EmpairingDTO dto){
-        ModelMapper m=new ModelMapper();
-        Empairing r=m.map(dto, Empairing.class);
+    public void register(@RequestBody EmpairingDTO dto) {
+        ModelMapper m = new ModelMapper();
+        Empairing r = m.map(dto, Empairing.class);
         eS.insert(r);
     }
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Integer id)
-    {
+    public void delete(@PathVariable("id") Integer id) {
         eS.delete(id);
     }
 
     @GetMapping("/{id}")
-    public EmpairingDTO listId(@PathVariable("id")Integer id){
-        ModelMapper m=new ModelMapper();
-        EmpairingDTO dto=m.map(eS.listId(id),EmpairingDTO.class);
+    public EmpairingDTO listId(@PathVariable("id") Integer id) {
+        ModelMapper m = new ModelMapper();
+        EmpairingDTO dto = m.map(eS.listId(id), EmpairingDTO.class);
         return dto;
     }
+
     @GetMapping
-    public List<EmpairingDTO> list(){
-        return eS.list().stream().map(x->{
-            ModelMapper m=new ModelMapper();
-            return m.map(x,EmpairingDTO.class);
+    public List<EmpairingDTO> list() {
+        return eS.list().stream().map(x -> {
+            ModelMapper m = new ModelMapper();
+            return m.map(x, EmpairingDTO.class);
         }).collect(Collectors.toList());
     }
+
     @PutMapping
     public void update(@RequestBody EmpairingDTO dto) {
         ModelMapper m = new ModelMapper();
-        Empairing a=m.map(dto,Empairing.class);
+        Empairing a = m.map(dto, Empairing.class);
         eS.insert(a);
     }
+
     @PostMapping("/accept/{empairingId}")
     public ResponseEntity<VideocallDTO> acceptEmpairing(@PathVariable int empairingId) {
         Videocall videocall = eSI.acceptEmpairing(empairingId);
@@ -80,14 +85,15 @@ public class EmpairingController {
             if (tokenDevice != null && !tokenDevice.isEmpty()) {
                 NotificationMessageDTO message = new NotificationMessageDTO();
                 message.setTokenDevice(tokenDevice);
-                message.setTitle("Tu solicitud ha sido aceptada");
-                message.setBody("Estás entrando a una videollamada con un voluntario.");
-                message.setImage(null);
                 message.setData(Map.of(
                         "type", "videocall_start",
                         "channel", videocall.getChannel(),
                         "token", videocall.getToken()));
-                fMS.sendSilentNotificationByToken(message);
+
+                String response = fMS.sendSilentNotificationByToken(message);
+                if (response == null) {
+                    System.err.println("Error enviando notificación silenciosa al dispositivo " + tokenDevice);
+                }
             }
 
             VideocallDTO dto = new VideocallDTO(videocall.getToken(), videocall.getChannel());
