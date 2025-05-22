@@ -76,4 +76,8 @@ public class VideocallServiceImplement implements IVideocallService {
         empairing.setIdEmpairing(idEmpairing);
         return vR.findByEmpairing(empairing);
     }
+    @Override
+    public Optional<Videocall> findByChannel(String channel) {
+        return vR.findByChannel(channel);
+    }
 }
