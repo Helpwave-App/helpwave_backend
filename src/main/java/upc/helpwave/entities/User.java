@@ -11,7 +11,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idUser;
+    private Integer idUser;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idProfile", referencedColumnName = "idProfile")
@@ -42,11 +42,11 @@ public class User {
         this.devices = devices;
     }
 
-    public int getIdUser() {
+    public Integer getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(int idUser) {
+    public void setIdUser(Integer idUser) {
         this.idUser = idUser;
     }
 
@@ -90,7 +90,7 @@ public class User {
         this.role = role;
     }
 
-    public User(int idUser, Profile profile, String username, String password, Boolean state, Role role) {
+    public User(Integer idUser, Profile profile, String username, String password, Boolean state, Role role) {
         this.idUser = idUser;
         this.profile = profile;
         this.username = username;
