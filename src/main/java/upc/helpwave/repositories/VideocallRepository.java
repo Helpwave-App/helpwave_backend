@@ -17,4 +17,5 @@ public interface VideocallRepository extends JpaRepository<Videocall, Integer> {
             "WHERE v.empairing.profile.idProfile = :idProfile " +
             "AND v.endVideocall > CURRENT_TIMESTAMP")
     List<Videocall> findActiveVideocallsByProfile(@Param("idProfile") int idProfile);
+    Optional<Videocall> findByChannel(String channel);
 }
