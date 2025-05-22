@@ -1,6 +1,5 @@
 package upc.helpwave.serviceinterfaces;
 
-import upc.helpwave.entities.Empairing;
 import upc.helpwave.entities.Videocall;
 
 import java.util.List;
@@ -12,4 +11,5 @@ public interface IVideocallService {
     public Videocall listId(Integer idVideocall);
     public List<Videocall> list();
     Optional<Videocall> findByEmpairingId(Integer idEmpairing);
+    Optional<Videocall> findByChannel(String channel);
 }
