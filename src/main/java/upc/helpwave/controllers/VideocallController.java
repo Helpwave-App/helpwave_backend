@@ -4,15 +4,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import upc.helpwave.dtos.SkillProfileDTO;
+import upc.helpwave.dtos.NotificationMessageDTO;
 import upc.helpwave.dtos.VideocallDTO;
-import upc.helpwave.entities.Empairing;
-import upc.helpwave.entities.Profile;
-import upc.helpwave.entities.SkillProfile;
-import upc.helpwave.entities.Videocall;
+import upc.helpwave.entities.*;
+import upc.helpwave.serviceimplements.FirebaseMessagingServiceImplement;
 import upc.helpwave.serviceinterfaces.IVideocallService;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 public class VideocallController {
     @Autowired
     private IVideocallService vS;
+    @Autowired
+    private FirebaseMessagingServiceImplement fMS;
     @GetMapping("/empairings/{id}")
     public ResponseEntity<VideocallDTO> findVideocallByEmpairingId(@PathVariable("id") Integer idEmpairing) {
         Optional<Videocall> videoOpt = vS.findByEmpairingId(idEmpairing);
@@ -65,5 +68,47 @@ public class VideocallController {
         ModelMapper m = new ModelMapper();
         Videocall a=m.map(dto,Videocall.class);
         vS.insert(a);
+    }
+    @PostMapping("/end")
+    public ResponseEntity<String> endVideocall(@RequestBody Map<String, String> payload) {
+        String channel = payload.get("channel");
+
+        if (channel == null || channel.isEmpty()) {
+            return ResponseEntity.badRequest().body("Channel is required.");
+        }
+
+        Optional<Videocall> videocallOpt = vS.findByChannel(channel);
+        if (!videocallOpt.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Videocall videocall = videocallOpt.get();
+        videocall.setEndVideocall(LocalDateTime.now(ZoneId.of("America/Lima")));
+        vS.insert(videocall); // update
+
+        Empairing empairing = videocall.getEmpairing();
+        Request request = empairing.getRequest();
+
+        User requester = request.getProfile().getUser();
+        if (requester != null && requester.getDevices() != null) {
+            for (Device device : requester.getDevices()) {
+                NotificationMessageDTO message = new NotificationMessageDTO();
+                message.setTokenDevice(device.getTokenDevice());
+                message.setData(Map.of("type", "videocall_end"));
+                fMS.sendSilentNotificationByToken(message);
+            }
+        }
+
+        User volunteer = empairing.getProfile().getUser();
+        if (volunteer != null && volunteer.getDevices() != null) {
+            for (Device device : volunteer.getDevices()) {
+                NotificationMessageDTO message = new NotificationMessageDTO();
+                message.setTokenDevice(device.getTokenDevice());
+                message.setData(Map.of("type", "videocall_end"));
+                fMS.sendSilentNotificationByToken(message);
+            }
+        }
+
+        return ResponseEntity.ok("Videollamada finalizada.");
     }
 }
