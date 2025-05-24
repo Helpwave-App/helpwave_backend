@@ -20,30 +20,44 @@ public class DeviceServiceImplement implements IDeviceService {
 
     @Override
     public void upsert(DeviceUpsertDTO dto) {
-        if (dto.getOldTokenDevice() != null && dto.getNewTokenDevice() != null) {
-            Optional<Device> existing = dR.findByTokenDevice(dto.getOldTokenDevice());
-            if (existing.isPresent()) {
-                Device device = existing.get();
-                device.setTokenDevice(dto.getNewTokenDevice());
-                device.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
-                dR.save(device);
-            } else {
-                throw new RuntimeException("No se encontró el dispositivo con el token: " + dto.getOldTokenDevice());
-            }
-        } else if (dto.getIdUser() != null && dto.getNewTokenDevice() != null) {
-            Optional<Device> existing = dR.findByTokenDevice(dto.getNewTokenDevice());
-            if (existing.isPresent()) {
-                Device device = existing.get();
-                if (device.getUser() != null && device.getUser().getIdUser() == dto.getIdUser()) {
-                    device.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
-                    dR.save(device);
-                    return;
-                } else {
-                    throw new RuntimeException("Este token ya está asociado a otro usuario.");
-                }
+        if (dto.getNewTokenDevice() == null || dto.getIdUser() == null) {
+            throw new RuntimeException("Parámetros insuficientes para crear o actualizar el dispositivo.");
+        }
 
-            }
+        Optional<Device> existingByOldToken = Optional.empty();
 
+        if (dto.getOldTokenDevice() != null) {
+            existingByOldToken = dR.findByTokenDevice(dto.getOldTokenDevice());
+        }
+
+        if (existingByOldToken.isPresent()) {
+            // Caso: actualizar token existente con uno nuevo
+            Device device = existingByOldToken.get();
+            device.setTokenDevice(dto.getNewTokenDevice());
+            device.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
+
+            User user = new User();
+            user.setIdUser(dto.getIdUser());
+            device.setUser(user);
+
+            dR.save(device);
+            return;
+        }
+
+        Optional<Device> existingByNewToken = dR.findByTokenDevice(dto.getNewTokenDevice());
+
+        if (existingByNewToken.isPresent()) {
+            // Reasociar token existente al nuevo usuario
+            Device device = existingByNewToken.get();
+
+            User user = new User();
+            user.setIdUser(dto.getIdUser());
+            device.setUser(user);
+            device.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
+
+            dR.save(device);
+        } else {
+            // Crear nuevo dispositivo
             Device newDevice = new Device();
             newDevice.setTokenDevice(dto.getNewTokenDevice());
             newDevice.setRegistrationDate(LocalDateTime.now(ZoneId.of("America/Lima")));
@@ -53,8 +67,6 @@ public class DeviceServiceImplement implements IDeviceService {
             newDevice.setUser(user);
 
             dR.save(newDevice);
-        } else {
-            throw new RuntimeException("Parámetros insuficientes para crear o actualizar el dispositivo.");
         }
     }
 
