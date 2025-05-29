@@ -1,32 +1,27 @@
 package upc.helpwave.dtos;
 
-import upc.helpwave.entities.Empairing;
-import java.time.LocalDateTime;
-
 public class VideocallDTO {
-    //private int idVideocall;
-    //private Empairing empairing;
     private String token;
     private String channel;
-    //private LocalDateTime startVideocall;
-    //private LocalDateTime endVideocall;
+    private String name;
+    private String lastName;
 
-    /*public int getIdVideocall() {
-        return idVideocall;
+    public String getName() {
+        return name;
     }
 
-    public void setIdVideocall(int idVideocall) {
-        this.idVideocall = idVideocall;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Empairing getEmpairing() {
-        return empairing;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setEmpairing(Empairing empairing) {
-        this.empairing = empairing;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
-    */
+
     public String getToken() {
         return token;
     }
@@ -42,26 +37,13 @@ public class VideocallDTO {
     public void setChannel(String channel) {
         this.channel = channel;
     }
-    /*
-    public LocalDateTime getStartVideocall() {
-        return startVideocall;
-    }
 
-    public void setStartVideocall(LocalDateTime startVideocall) {
-        this.startVideocall = startVideocall;
-    }
-
-    public LocalDateTime getEndVideocall() {
-        return endVideocall;
-    }
-
-    public void setEndVideocall(LocalDateTime endVideocall) {
-        this.endVideocall = endVideocall;
-    }*/
-
-    public VideocallDTO(String token, String channel) {
+    public VideocallDTO(String token, String channel, String name, String lastName) {
         this.token = token;
         this.channel = channel;
+        this.name = name;
+        this.lastName = lastName;
     }
+
     public VideocallDTO() {}
 }
