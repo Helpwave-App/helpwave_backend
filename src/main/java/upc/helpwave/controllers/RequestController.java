@@ -2,6 +2,7 @@ package upc.helpwave.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.NotificationMessageDTO;
@@ -60,16 +61,26 @@ public class RequestController {
     }
 
     @PostMapping
-    public ResponseEntity<List<String>> register(@RequestBody RequestDTO dto) {
+    public ResponseEntity<?> register(@RequestBody RequestDTO dto) {
         Optional<Profile> profileOpt = pR.findById(dto.getIdProfile());
         Optional<Skill> skillOpt = sR.findById(dto.getIdSkill());
 
         if (!profileOpt.isPresent() || !skillOpt.isPresent()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Perfil o habilidad no encontrados.");
+        }
+
+        Profile profile = profileOpt.get();
+
+        LocalDateTime haceUnMinuto = LocalDateTime.now(ZoneId.of("America/Lima")).minusMinutes(1);
+        List<Request> recientes = rS.findRecentByProfile(profile.getIdProfile(), haceUnMinuto);
+
+        if (!recientes.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body("Solo puedes registrar una solicitud por minuto.");
         }
 
         Request r = new Request();
-        r.setProfile(profileOpt.get());
+        r.setProfile(profile);
         r.setTokenDevice(dto.getTokenDevice());
         r.setSkill(skillOpt.get());
         r.setDateRequest(LocalDateTime.now(ZoneId.of("America/Lima")));
@@ -79,20 +90,24 @@ public class RequestController {
         List<Empairing> empairings = eS.generateEmpairings(savedRequest);
         List<String> tokens = new ArrayList<>();
 
+        String fullName = profile.getName() + " " + profile.getLastName();
+
         for (Empairing empairing : empairings) {
-            Profile profile = empairing.getProfile();
+            Profile target = empairing.getProfile();
             String skillName = savedRequest.getSkill().getSkillDesc();
 
-            for (Device device : profile.getUser().getDevices()) {
+            for (Device device : target.getUser().getDevices()) {
                 NotificationMessageDTO message = new NotificationMessageDTO();
                 message.setTokenDevice(device.getTokenDevice());
                 message.setTitle("Nueva solicitud de ayuda");
-                message.setBody("Alguien necesita asistencia");
+                message.setBody(fullName + " necesita tu ayuda");
 
                 Map<String, String> data = new HashMap<>();
                 data.put("type", "help_request");
                 data.put("idEmpairing", String.valueOf(empairing.getIdEmpairing()));
                 data.put("skill", skillName);
+                data.put("name", profile.getName());
+                data.put("lastname", profile.getLastName());
 
                 message.setData(data);
 
@@ -102,5 +117,19 @@ public class RequestController {
         }
 
         return ResponseEntity.ok(tokens);
+    }
+
+    @PutMapping("/cancel/{idRequest}")
+    public ResponseEntity<String> cancelRequest(@PathVariable("idRequest") Integer idRequest) {
+        Request request = rS.listId(idRequest);
+
+        if (request == null || request.getIdRequest() == 0) {
+            return ResponseEntity.notFound().build();
+        }
+
+        request.setStateRequest(false);
+        rS.insert(request);
+
+        return ResponseEntity.ok("Solicitud cancelada correctamente.");
     }
 }
