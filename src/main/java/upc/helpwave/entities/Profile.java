@@ -1,6 +1,8 @@
 package upc.helpwave.entities;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -23,8 +25,8 @@ public class Profile {
     @Column(name = "birthDate")
     private LocalDate birthDate;
 
-    @Column(name = "scoreProfile")
-    private Double scoreProfile;
+    @Column(name = "scoreProfile", precision = 3, scale = 2)
+    private BigDecimal scoreProfile;
 
     @Column(name = "email", length = 200)
     private String email;
@@ -34,6 +36,9 @@ public class Profile {
 
     @Column(name = "photoUrl", length = 500)
     private String photoUrl;
+
+    @Column(name = "assistances")
+    private Integer assistances;
 
     @OneToOne(mappedBy = "profile")
     private User user;
@@ -49,14 +54,14 @@ public class Profile {
     public Profile() {
     }
 
-    public Profile(int idProfile, String name, String lastName, Double scoreProfile) {
+    public Profile(int idProfile, String name, String lastName, BigDecimal scoreProfile) {
         this.idProfile = idProfile;
         this.name = name;
         this.lastName = lastName;
         this.scoreProfile = scoreProfile;
     }
 
-    public Profile(int idProfile, Level level, String name, String lastName, LocalDate birthDate, Double scoreProfile) {
+    public Profile(int idProfile, Level level, String name, String lastName, LocalDate birthDate, BigDecimal scoreProfile) {
         this.idProfile = idProfile;
         this.level = level;
         this.name = name;
@@ -65,8 +70,7 @@ public class Profile {
         this.scoreProfile = scoreProfile;
     }
 
-    public Profile(int idProfile, Level level, String name, String lastName, LocalDate birthDate, Double scoreProfile,
-            String email, String phoneNumber, String photoUrl) {
+    public Profile(int idProfile, Level level, String name, String lastName, LocalDate birthDate, BigDecimal scoreProfile, String email, String phoneNumber, String photoUrl, Integer assistances, User user) {
         this.idProfile = idProfile;
         this.level = level;
         this.name = name;
@@ -76,6 +80,16 @@ public class Profile {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.photoUrl = photoUrl;
+        this.assistances = assistances;
+        this.user = user;
+    }
+
+    public Integer getAssistances() {
+        return assistances;
+    }
+
+    public void setAssistances(Integer assistances) {
+        this.assistances = assistances;
     }
 
     public int getIdProfile() {
@@ -118,11 +132,11 @@ public class Profile {
         this.birthDate = birthDate;
     }
 
-    public Double getScoreProfile() {
+    public BigDecimal getScoreProfile() {
         return scoreProfile;
     }
 
-    public void setScoreProfile(Double scoreProfile) {
+    public void setScoreProfile(BigDecimal scoreProfile) {
         this.scoreProfile = scoreProfile;
     }
 
