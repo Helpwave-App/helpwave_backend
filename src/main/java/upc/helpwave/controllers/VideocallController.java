@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.NotificationMessageDTO;
 import upc.helpwave.dtos.VideocallDTO;
 import upc.helpwave.entities.*;
+import upc.helpwave.repositories.ProfileRepository;
 import upc.helpwave.serviceimplements.FirebaseMessagingServiceImplement;
 import upc.helpwave.serviceinterfaces.IVideocallService;
 
@@ -24,6 +25,8 @@ public class VideocallController {
     private IVideocallService vS;
     @Autowired
     private FirebaseMessagingServiceImplement fMS;
+    @Autowired
+    private ProfileRepository pR;
     @GetMapping("/empairings/{id}")
     public ResponseEntity<VideocallDTO> findVideocallByEmpairingId(@PathVariable("id") Integer idEmpairing) {
         Optional<Videocall> videoOpt = vS.findByEmpairingId(idEmpairing);
@@ -84,7 +87,7 @@ public class VideocallController {
 
         Videocall videocall = videocallOpt.get();
         videocall.setEndVideocall(LocalDateTime.now(ZoneId.of("America/Lima")));
-        vS.insert(videocall); // update
+        vS.insert(videocall);
 
         Empairing empairing = videocall.getEmpairing();
         Request request = empairing.getRequest();
@@ -99,7 +102,8 @@ public class VideocallController {
             }
         }
 
-        User volunteer = empairing.getProfile().getUser();
+        Profile volunteerProfile = empairing.getProfile();
+        User volunteer = volunteerProfile.getUser();
         if (volunteer != null && volunteer.getDevices() != null) {
             for (Device device : volunteer.getDevices()) {
                 NotificationMessageDTO message = new NotificationMessageDTO();
@@ -108,6 +112,10 @@ public class VideocallController {
                 fMS.sendSilentNotificationByToken(message);
             }
         }
+
+        Integer currentAssistances = volunteerProfile.getAssistances() != null ? volunteerProfile.getAssistances() : 0;
+        volunteerProfile.setAssistances(currentAssistances + 1);
+        pR.save(volunteerProfile);
 
         return ResponseEntity.ok("Videollamada finalizada.");
     }
