@@ -2,15 +2,13 @@ package upc.helpwave.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.EmpairingDTO;
 import upc.helpwave.dtos.NotificationMessageDTO;
 import upc.helpwave.dtos.VideocallDTO;
-import upc.helpwave.entities.Empairing;
-import upc.helpwave.entities.Request;
-import upc.helpwave.entities.User;
-import upc.helpwave.entities.Videocall;
+import upc.helpwave.entities.*;
 import upc.helpwave.serviceimplements.EmpairingServiceImplement;
 import upc.helpwave.serviceimplements.FirebaseMessagingServiceImplement;
 import upc.helpwave.serviceinterfaces.IEmpairingService;
@@ -71,10 +69,18 @@ public class EmpairingController {
 
     @PostMapping("/accept/{empairingId}")
     public ResponseEntity<VideocallDTO> acceptEmpairing(@PathVariable int empairingId) {
+        Empairing empairing = eS.listId(empairingId);
+        if (empairing == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Request request = empairing.getRequest();
+        if (request == null || !request.getStateRequest()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         Videocall videocall = eSI.acceptEmpairing(empairingId);
         if (videocall != null) {
-            Empairing empairing = eS.listId(empairingId);
-            Request request = empairing.getRequest();
             User user = request.getProfile().getUser();
 
             String tokenDevice = null;
@@ -96,11 +102,17 @@ public class EmpairingController {
                 }
             }
 
-            VideocallDTO dto = new VideocallDTO(videocall.getToken(), videocall.getChannel());
+            Profile accepter = empairing.getProfile();
+            VideocallDTO dto = new VideocallDTO(
+                    videocall.getToken(),
+                    videocall.getChannel(),
+                    accepter.getName(),
+                    accepter.getLastName()
+            );
+
             return ResponseEntity.ok(dto);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-
 }
