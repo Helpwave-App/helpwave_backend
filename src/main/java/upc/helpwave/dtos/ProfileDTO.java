@@ -2,6 +2,7 @@ package upc.helpwave.dtos;
 
 import upc.helpwave.entities.Level;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ProfileDTO {
@@ -10,10 +11,19 @@ public class ProfileDTO {
     private String name;
     private String lastName;
     private LocalDate birthDate;
-    private Double scoreProfile;
+    private BigDecimal scoreProfile;
     private String email;
     private String phoneNumber;
     private String photoUrl;
+    private Integer assistances;
+
+    public Integer getAssistances() {
+        return assistances;
+    }
+
+    public void setAssistances(Integer assistances) {
+        this.assistances = assistances;
+    }
 
     public int getIdProfile() {
         return idProfile;
@@ -55,11 +65,11 @@ public class ProfileDTO {
         this.birthDate = birthDate;
     }
 
-    public Double getScoreProfile() {
+    public BigDecimal getScoreProfile() {
         return scoreProfile;
     }
 
-    public void setScoreProfile(Double scoreProfile) {
+    public void setScoreProfile(BigDecimal scoreProfile) {
         this.scoreProfile = scoreProfile;
     }
 
