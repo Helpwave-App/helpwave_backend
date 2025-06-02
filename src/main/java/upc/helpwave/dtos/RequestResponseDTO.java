@@ -3,24 +3,23 @@ package upc.helpwave.dtos;
 import java.util.List;
 
 public class RequestResponseDTO {
-    private String name;
-    private String lastName;
+    private int idRequest;
     private List<String> tokens;
 
-    public String getName() {
-        return name;
+    public RequestResponseDTO() {
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public RequestResponseDTO(int idRequest, List<String> tokens) {
+        this.tokens = tokens;
+        this.idRequest = idRequest;
     }
 
-    public String getLastName() {
-        return lastName;
+    public int getIdRequest() {
+        return idRequest;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setIdRequest(int idRequest) {
+        this.idRequest = idRequest;
     }
 
     public List<String> getTokens() {
