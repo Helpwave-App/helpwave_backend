@@ -52,22 +52,26 @@ public class CommentsController {
         cR.save(comment);
 
         Profile volunteer = videocall.getEmpairing().getProfile();
-        Integer assistances = volunteer.getAssistances() != null ? volunteer.getAssistances() : 0;
-        BigDecimal currentScore = volunteer.getScoreProfile() != null ? volunteer.getScoreProfile() : BigDecimal.ZERO;
 
-        if (assistances > 0) {
-            BigDecimal assistancesBD = BigDecimal.valueOf(assistances);
+        if (dto.getScoreVolunteer() > 2) {
+            Integer assistances = volunteer.getAssistances() != null ? volunteer.getAssistances() : 0;
+            BigDecimal currentScore = volunteer.getScoreProfile() != null ? volunteer.getScoreProfile() : BigDecimal.ZERO;
+
+            int newAssistances = assistances + 1;
+            BigDecimal assistancesBD = BigDecimal.valueOf(newAssistances);
             BigDecimal newScoreBD = BigDecimal.valueOf(dto.getScoreVolunteer());
 
-            BigDecimal sumatoria = currentScore.multiply(BigDecimal.valueOf(assistances - 1)).add(newScoreBD);
+            BigDecimal sumatoria = currentScore.multiply(BigDecimal.valueOf(assistances)).add(newScoreBD);
             BigDecimal promedio = sumatoria.divide(assistancesBD, 2, RoundingMode.HALF_UP);
 
+            volunteer.setAssistances(newAssistances);
             volunteer.setScoreProfile(promedio);
             pR.save(volunteer);
         }
 
-        return ResponseEntity.ok("Comentario registrado y puntaje actualizado.");
+        return ResponseEntity.ok("Comentario registrado correctamente.");
     }
+
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Integer id)

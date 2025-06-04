@@ -89,6 +89,8 @@ public class VideocallController {
         videocall.setEndVideocall(LocalDateTime.now(ZoneId.of("America/Lima")));
         vS.insert(videocall);
 
+        String idVideocallStr = String.valueOf(videocall.getIdVideocall());
+
         Empairing empairing = videocall.getEmpairing();
         Request request = empairing.getRequest();
 
@@ -97,7 +99,10 @@ public class VideocallController {
             for (Device device : requester.getDevices()) {
                 NotificationMessageDTO message = new NotificationMessageDTO();
                 message.setTokenDevice(device.getTokenDevice());
-                message.setData(Map.of("type", "videocall_end"));
+                message.setData(Map.of(
+                        "type", "videocall_end",
+                        "idVideocall", idVideocallStr
+                ));
                 fMS.sendSilentNotificationByToken(message);
             }
         }
@@ -108,14 +113,13 @@ public class VideocallController {
             for (Device device : volunteer.getDevices()) {
                 NotificationMessageDTO message = new NotificationMessageDTO();
                 message.setTokenDevice(device.getTokenDevice());
-                message.setData(Map.of("type", "videocall_end"));
+                message.setData(Map.of(
+                        "type", "videocall_end",
+                        "idVideocall", idVideocallStr
+                ));
                 fMS.sendSilentNotificationByToken(message);
             }
         }
-
-        Integer currentAssistances = volunteerProfile.getAssistances() != null ? volunteerProfile.getAssistances() : 0;
-        volunteerProfile.setAssistances(currentAssistances + 1);
-        pR.save(volunteerProfile);
 
         return ResponseEntity.ok("Videollamada finalizada.");
     }

@@ -2,12 +2,14 @@ package upc.helpwave.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.ProfileDTO;
 import upc.helpwave.entities.Profile;
 import upc.helpwave.serviceinterfaces.IProfileService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,11 +45,28 @@ public class ProfileController {
         }).collect(Collectors.toList());
     }
 
-    @PutMapping("/{id}")
-    public void update(@PathVariable("id") Integer id, @RequestBody ProfileDTO dto) {
-        ModelMapper m = new ModelMapper();
-        Profile updatedProfile = m.map(dto, Profile.class);
-        updatedProfile.setIdProfile(id);
-        pS.insert(updatedProfile);
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updatePartially(@PathVariable("id") Integer id, @RequestBody ProfileDTO dto) {
+        Optional<Profile> existingOpt = pS.findById(id);
+
+        if (!existingOpt.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Profile existing = existingOpt.get();
+
+        if (dto.getLevel() != null) existing.setLevel(dto.getLevel());
+        if (dto.getName() != null) existing.setName(dto.getName());
+        if (dto.getLastName() != null) existing.setLastName(dto.getLastName());
+        if (dto.getBirthDate() != null) existing.setBirthDate(dto.getBirthDate());
+        if (dto.getScoreProfile() != null) existing.setScoreProfile(dto.getScoreProfile());
+        if (dto.getEmail() != null) existing.setEmail(dto.getEmail());
+        if (dto.getPhoneNumber() != null) existing.setPhoneNumber(dto.getPhoneNumber());
+        if (dto.getPhotoUrl() != null) existing.setPhotoUrl(dto.getPhotoUrl());
+        if (dto.getAssistances() != null) existing.setAssistances(dto.getAssistances());
+
+        pS.insert(existing);
+
+        return ResponseEntity.ok("Perfil actualizado parcialmente");
     }
 }

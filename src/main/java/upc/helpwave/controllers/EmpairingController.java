@@ -88,13 +88,17 @@ public class EmpairingController {
                 tokenDevice = user.getDevices().get(0).getTokenDevice();
             }
 
+            Profile accepter = empairing.getProfile();
+
             if (tokenDevice != null && !tokenDevice.isEmpty()) {
                 NotificationMessageDTO message = new NotificationMessageDTO();
                 message.setTokenDevice(tokenDevice);
                 message.setData(Map.of(
                         "type", "videocall_start",
                         "channel", videocall.getChannel(),
-                        "token", videocall.getToken()));
+                        "token", videocall.getToken(),
+                        "name", accepter.getName(),
+                        "lastname", accepter.getLastName()));
 
                 String response = fMS.sendSilentNotificationByToken(message);
                 if (response == null) {
@@ -102,13 +106,11 @@ public class EmpairingController {
                 }
             }
 
-            Profile accepter = empairing.getProfile();
             VideocallDTO dto = new VideocallDTO(
                     videocall.getToken(),
                     videocall.getChannel(),
                     accepter.getName(),
-                    accepter.getLastName()
-            );
+                    accepter.getLastName());
 
             return ResponseEntity.ok(dto);
         } else {

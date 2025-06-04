@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.NotificationMessageDTO;
 import upc.helpwave.dtos.RequestDTO;
+import upc.helpwave.dtos.RequestResponseDTO;
 import upc.helpwave.entities.*;
 import upc.helpwave.repositories.ProfileRepository;
 import upc.helpwave.repositories.SkillRepository;
@@ -116,7 +117,8 @@ public class RequestController {
             }
         }
 
-        return ResponseEntity.ok(tokens);
+        RequestResponseDTO response = new RequestResponseDTO(savedRequest.getIdRequest(), tokens);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/cancel/{idRequest}")
