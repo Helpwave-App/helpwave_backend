@@ -7,6 +7,7 @@ import upc.helpwave.repositories.ProfileRepository;
 import upc.helpwave.serviceinterfaces.IProfileService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProfileServiceImplement implements IProfileService {
@@ -31,5 +32,10 @@ public class ProfileServiceImplement implements IProfileService {
     @Override
     public List<Profile> list() {
         return pR.findAll();
+    }
+
+    @Override
+    public Optional<Profile> findById(Integer id) {
+        return pR.findById(id);
     }
 }
