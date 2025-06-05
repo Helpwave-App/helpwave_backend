@@ -4,10 +4,12 @@ import java.math.BigDecimal;
 
 public class LevelProgressDTO {
     private Integer assistances;
-    private String currentLevel;
     private Integer missingAssistances;
-    private String nextLevel;
     private BigDecimal scoreProfile;
+    private String currentLevel;
+    private String currentLevelPhotoUrl;
+    private String nextLevel;
+    private String nextLevelPhotoUrl;
 
     public Integer getAssistances() {
         return assistances;
@@ -15,14 +17,6 @@ public class LevelProgressDTO {
 
     public void setAssistances(Integer assistances) {
         this.assistances = assistances;
-    }
-
-    public String getCurrentLevel() {
-        return currentLevel;
-    }
-
-    public void setCurrentLevel(String currentLevel) {
-        this.currentLevel = currentLevel;
     }
 
     public Integer getMissingAssistances() {
@@ -33,6 +27,30 @@ public class LevelProgressDTO {
         this.missingAssistances = missingAssistances;
     }
 
+    public BigDecimal getScoreProfile() {
+        return scoreProfile;
+    }
+
+    public void setScoreProfile(BigDecimal scoreProfile) {
+        this.scoreProfile = scoreProfile;
+    }
+
+    public String getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public void setCurrentLevel(String currentLevel) {
+        this.currentLevel = currentLevel;
+    }
+
+    public String getCurrentLevelPhotoUrl() {
+        return currentLevelPhotoUrl;
+    }
+
+    public void setCurrentLevelPhotoUrl(String currentLevelPhotoUrl) {
+        this.currentLevelPhotoUrl = currentLevelPhotoUrl;
+    }
+
     public String getNextLevel() {
         return nextLevel;
     }
@@ -41,11 +59,11 @@ public class LevelProgressDTO {
         this.nextLevel = nextLevel;
     }
 
-    public BigDecimal getScoreProfile() {
-        return scoreProfile;
+    public String getNextLevelPhotoUrl() {
+        return nextLevelPhotoUrl;
     }
 
-    public void setScoreProfile(BigDecimal scoreProfile) {
-        this.scoreProfile = scoreProfile;
+    public void setNextLevelPhotoUrl(String nextLevelPhotoUrl) {
+        this.nextLevelPhotoUrl = nextLevelPhotoUrl;
     }
 }

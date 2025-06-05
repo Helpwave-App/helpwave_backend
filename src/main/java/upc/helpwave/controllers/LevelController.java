@@ -46,49 +46,55 @@ public class LevelController {
 
         LevelProgressDTO dto = new LevelProgressDTO();
         dto.setAssistances(assistances);
-        dto.setCurrentLevel(currentLevel.getNameLevel());
         dto.setScoreProfile(score);
+        dto.setCurrentLevel(currentLevel.getNameLevel());
+        dto.setCurrentLevelPhotoUrl(currentLevel.getPhotoUrl());
 
         if (nextLevelOpt.isPresent()) {
             Level nextLevel = nextLevelOpt.get();
-            dto.setNextLevel(nextLevel.getNameLevel());
             dto.setMissingAssistances(nextLevel.getMinRequest() - assistances);
+            dto.setNextLevel(nextLevel.getNameLevel());
+            dto.setNextLevelPhotoUrl(nextLevel.getPhotoUrl());
         } else {
-            dto.setNextLevel("Máximo nivel alcanzado");
             dto.setMissingAssistances(0);
+            dto.setNextLevel("Máximo nivel alcanzado");
+            dto.setNextLevelPhotoUrl(currentLevel.getPhotoUrl());
         }
 
         return ResponseEntity.ok(dto);
     }
+
     @PostMapping
-    public void register(@RequestBody LevelDTO dto){
-        ModelMapper m=new ModelMapper();
-        Level r=m.map(dto, Level.class);
+    public void register(@RequestBody LevelDTO dto) {
+        ModelMapper m = new ModelMapper();
+        Level r = m.map(dto, Level.class);
         lS.insert(r);
     }
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Integer id)
-    {
+    public void delete(@PathVariable("id") Integer id) {
         lS.delete(id);
     }
 
     @GetMapping("/{id}")
-    public LevelDTO listId(@PathVariable("id")Integer id){
-        ModelMapper m=new ModelMapper();
-        LevelDTO dto=m.map(lS.listId(id),LevelDTO.class);
+    public LevelDTO listId(@PathVariable("id") Integer id) {
+        ModelMapper m = new ModelMapper();
+        LevelDTO dto = m.map(lS.listId(id), LevelDTO.class);
         return dto;
     }
+
     @GetMapping
-    public List<LevelDTO> list(){
-        return lS.list().stream().map(x->{
-            ModelMapper m=new ModelMapper();
-            return m.map(x,LevelDTO.class);
+    public List<LevelDTO> list() {
+        return lS.list().stream().map(x -> {
+            ModelMapper m = new ModelMapper();
+            return m.map(x, LevelDTO.class);
         }).collect(Collectors.toList());
     }
+
     @PutMapping
     public void update(@RequestBody LevelDTO dto) {
         ModelMapper m = new ModelMapper();
-        Level a=m.map(dto,Level.class);
+        Level a = m.map(dto, Level.class);
         lS.insert(a);
     }
 }
