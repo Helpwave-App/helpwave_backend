@@ -18,14 +18,26 @@ public class Level {
     @Column(name = "maxRequest", nullable = false)
     private int maxRequest;
 
+    @Column(name = "photoUrl", length = 500)
+    private String photoUrl;
+
     public Level() {
     }
 
-    public Level(int idLevel, String nameLevel, int minRequest, int maxRequest) {
+    public Level(int idLevel, String nameLevel, int minRequest, int maxRequest, String photoUrl) {
         this.idLevel = idLevel;
         this.nameLevel = nameLevel;
         this.minRequest = minRequest;
         this.maxRequest = maxRequest;
+        this.photoUrl = photoUrl;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public int getIdLevel() {
