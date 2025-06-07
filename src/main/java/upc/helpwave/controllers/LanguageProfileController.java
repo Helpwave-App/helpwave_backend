@@ -4,9 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.LanguageProfileDTO;
-import upc.helpwave.entities.LanguageProfile;
-import upc.helpwave.entities.Profile;
-import upc.helpwave.entities.User;
+import upc.helpwave.dtos.LanguageProfileListDTO;
+import upc.helpwave.entities.*;
+import upc.helpwave.repositories.LanguageRepository;
+import upc.helpwave.repositories.ProfileRepository;
 import upc.helpwave.repositories.UserRepository;
 import upc.helpwave.serviceinterfaces.ILanguageProfileService;
 
@@ -21,6 +22,34 @@ public class LanguageProfileController {
     private ILanguageProfileService lS;
     @Autowired
     private UserRepository uR;
+    @Autowired
+    private ProfileRepository pR;
+
+    @Autowired
+    private LanguageRepository lR;
+
+    @PostMapping("/batch")
+    public void registerBatch(@RequestBody LanguageProfileListDTO dto) {
+        Optional<Profile> profileOpt = pR.findById(dto.getIdProfile());
+        if (!profileOpt.isPresent()) {
+            throw new RuntimeException("Perfil no encontrado con ID: " + dto.getIdProfile());
+        }
+
+        Profile profile = profileOpt.get();
+
+        List<LanguageProfile> list = dto.getLanguageIds().stream().map(languageId -> {
+            Optional<Language> languageOpt = lR.findById(languageId);
+            if (!languageOpt.isPresent()) {
+                throw new RuntimeException("Language no encontrado con ID: " + languageId);
+            }
+            LanguageProfile sp = new LanguageProfile();
+            sp.setProfile(profile);
+            sp.setLanguage(languageOpt.get());
+            return sp;
+        }).collect(Collectors.toList());
+
+        lS.insertAll(list);
+    }
     @PostMapping
     public void register(@RequestBody LanguageProfileDTO dto){
         ModelMapper m=new ModelMapper();
