@@ -31,6 +31,10 @@ public class LanguageProfileServiceImplement implements ILanguageProfileService 
         return lR.findAll();
     }
     @Override
+    public void insertAll(List<LanguageProfile> languageProfiles) {
+        lR.saveAll(languageProfiles);
+    }
+    @Override
     public List<LanguageProfile> findByProfile(Profile profile) {
         return lR.findByProfile(profile);
     }
