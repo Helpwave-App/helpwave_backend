@@ -3,10 +3,7 @@ package upc.helpwave.serviceimplements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upc.helpwave.entities.*;
-import upc.helpwave.repositories.AvailabilityRepository;
-import upc.helpwave.repositories.EmpairingRepository;
-import upc.helpwave.repositories.RequestRepository;
-import upc.helpwave.repositories.VideocallRepository;
+import upc.helpwave.repositories.*;
 import upc.helpwave.serviceinterfaces.IEmpairingService;
 
 import java.time.LocalDateTime;
@@ -28,6 +25,10 @@ public class EmpairingServiceImplement implements IEmpairingService {
     private RequestRepository rR;
     @Autowired
     private VideocallRepository vR;
+    @Autowired
+    private LanguageProfileRepository lR;
+
+
 
     @Override
     public void insert(Empairing empairing) {
@@ -54,15 +55,18 @@ public class EmpairingServiceImplement implements IEmpairingService {
         LocalDateTime requestDateTime = request.getDateRequest();
         String day = String.valueOf(requestDateTime.getDayOfWeek().getValue());
         LocalTime time = requestDateTime.toLocalTime();
-
+        List<Integer> requesterLanguageIds = lR.findLanguageIdsByProfile(request.getProfile().getIdProfile());
         List<Profile> allAvailable = aR.findProfilesAvailableAtWithSkill(day, time, request.getSkill().getIdSkill());
         List<Integer> usedProfileIds = eR.findProfileIdsByIdRequest(request.getIdRequest());
 
         List<Profile> remaining = allAvailable.stream()
                 .filter(p -> !usedProfileIds.contains(p.getIdProfile()))
                 .filter(p -> vR.findActiveVideocallsByProfile(p.getIdProfile()).isEmpty())
+                .filter(p -> {
+                    List<Integer> volunteerLanguages = lR.findLanguageIdsByProfile(p.getIdProfile());
+                    return volunteerLanguages.stream().anyMatch(requesterLanguageIds::contains);
+                })
                 .collect(Collectors.toList());
-
         Collections.shuffle(remaining);
 
         int batchSize = 5;
