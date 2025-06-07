@@ -20,11 +20,8 @@ public class Reports {
     private TypeReport typeReport;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "idStateReport", nullable = false)
+    @JoinColumn(name = "idStateReport")
     private StateReport stateReport;
-
-    @Column(name = "typeReport", nullable = false, length = 100)
-    private String typeReportDescription;
 
     @Column(name = "descriptionReport", length = 200)
     private String descriptionReport;
@@ -35,13 +32,11 @@ public class Reports {
     public Reports() {
     }
 
-    public Reports(int idReport, Videocall videocall, TypeReport typeReport, StateReport stateReport,
-            String typeReportDescription, String descriptionReport, LocalDateTime dateReport) {
+    public Reports(int idReport, Videocall videocall, TypeReport typeReport, StateReport stateReport, String descriptionReport, LocalDateTime dateReport) {
         this.idReport = idReport;
         this.videocall = videocall;
         this.typeReport = typeReport;
         this.stateReport = stateReport;
-        this.typeReportDescription = typeReportDescription;
         this.descriptionReport = descriptionReport;
         this.dateReport = dateReport;
     }
@@ -76,14 +71,6 @@ public class Reports {
 
     public void setStateReport(StateReport stateReport) {
         this.stateReport = stateReport;
-    }
-
-    public String getTypeReportDescription() {
-        return typeReportDescription;
-    }
-
-    public void setTypeReportDescription(String typeReportDescription) {
-        this.typeReportDescription = typeReportDescription;
     }
 
     public String getDescriptionReport() {
