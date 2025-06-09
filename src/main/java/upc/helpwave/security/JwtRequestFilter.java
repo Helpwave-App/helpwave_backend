@@ -34,7 +34,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				path.equals("/availabilities/batch") ||
 				path.equals("/skills") ||
 				path.equals("/user/check-username") ||
-				path.equals("/notification")) {
+				path.equals("/notification") ||
+				path.equals("/languageProfiles/batch") ||
+				path.equals("/languageProfiles")) {
 			chain.doFilter(request, response);
 			return;
 		}
