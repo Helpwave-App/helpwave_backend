@@ -10,7 +10,7 @@ public class TypeReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idTypeReport;
 
-    @Column(name = "typeDesc", nullable = false, length = 30)
+    @Column(name = "typeDesc", nullable = false, length = 50)
     private String typeDesc;
 
     public TypeReport() {
