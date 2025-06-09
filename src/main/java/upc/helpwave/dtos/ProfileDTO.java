@@ -1,13 +1,11 @@
 package upc.helpwave.dtos;
 
-import upc.helpwave.entities.Level;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ProfileDTO {
     private int idProfile;
-    private Level level;
+    private Integer idLevel;
     private String name;
     private String lastName;
     private LocalDate birthDate;
@@ -33,12 +31,12 @@ public class ProfileDTO {
         this.idProfile = idProfile;
     }
 
-    public Level getLevel() {
-        return level;
+    public Integer getIdLevel() {
+        return idLevel;
     }
 
-    public void setLevel(Level level) {
-        this.level = level;
+    public void setIdLevel(Integer idLevel) {
+        this.idLevel = idLevel;
     }
 
     public String getName() {
