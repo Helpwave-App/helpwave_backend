@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.ProfileDTO;
+import upc.helpwave.entities.Level;
 import upc.helpwave.entities.Profile;
+import upc.helpwave.repositories.LevelRepository;
 import upc.helpwave.serviceinterfaces.IProfileService;
 
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 public class ProfileController {
     @Autowired
     private IProfileService pS;
+    @Autowired
+    private LevelRepository lR;
 
     @PostMapping
     public void register(@RequestBody ProfileDTO dto) {
@@ -55,7 +59,13 @@ public class ProfileController {
 
         Profile existing = existingOpt.get();
 
-        if (dto.getLevel() != null) existing.setLevel(dto.getLevel());
+        if (dto.getIdLevel() != null) {
+            Optional<Level> levelOpt = lR.findById(dto.getIdLevel());
+            if (!levelOpt.isPresent()) {
+                return ResponseEntity.badRequest().body("Nivel no encontrado.");
+            }
+            existing.setLevel(levelOpt.get());
+        }
         if (dto.getName() != null) existing.setName(dto.getName());
         if (dto.getLastName() != null) existing.setLastName(dto.getLastName());
         if (dto.getBirthDate() != null) existing.setBirthDate(dto.getBirthDate());

@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upc.helpwave.dtos.ReportsDTO;
-import upc.helpwave.entities.Reports;
-import upc.helpwave.entities.StateReport;
-import upc.helpwave.entities.TypeReport;
-import upc.helpwave.entities.Videocall;
+import upc.helpwave.entities.*;
 import upc.helpwave.repositories.StateReportRepository;
 import upc.helpwave.repositories.TypeReportRepository;
 import upc.helpwave.repositories.VideocallRepository;
@@ -45,14 +42,35 @@ public class ReportsController {
             return ResponseEntity.badRequest().body("Videocall, TypeReport o StateReport no encontrados.");
         }
 
-        Reports r = new Reports();
-        r.setVideocall(videocallOpt.get());
-        r.setTypeReport(typeReportOpt.get());
-        r.setStateReport(stateReportOpt.get());
-        r.setDateReport(LocalDateTime.now(ZoneId.of("America/Lima")));
-        r.setDescriptionReport(dto.getDescriptionReport());
+        Videocall videocall = videocallOpt.get();
+        Empairing empairing = videocall.getEmpairing();
 
-        rS.insert(r);
+        if (empairing == null || empairing.getRequest() == null || empairing.getProfile() == null) {
+            return ResponseEntity.badRequest().body("Emparejamiento inválido en la videollamada.");
+        }
+
+        int idReporta = dto.getIdProfile();
+        int idSolicitante = empairing.getRequest().getProfile().getIdProfile();
+        int idVoluntario = empairing.getProfile().getIdProfile();
+
+        int idReported;
+        if (idReporta == idSolicitante) {
+            idReported = idVoluntario;
+        } else if (idReporta == idVoluntario) {
+            idReported = idSolicitante;
+        } else {
+            return ResponseEntity.badRequest().body("El perfil no participó en esta videollamada.");
+        }
+
+        Reports report = new Reports();
+        report.setVideocall(videocall);
+        report.setTypeReport(typeReportOpt.get());
+        report.setStateReport(stateReportOpt.get());
+        report.setDateReport(LocalDateTime.now(ZoneId.of("America/Lima")));
+        report.setDescriptionReport(dto.getDescriptionReport());
+        report.setIdReported(idReported);
+
+        rS.insert(report);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Reporte registrado correctamente.");
     }
