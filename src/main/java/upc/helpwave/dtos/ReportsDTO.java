@@ -4,6 +4,15 @@ public class ReportsDTO {
     private int idVideocall;
     private int idTypeReport;
     private String descriptionReport;
+    private int idProfile;
+
+    public int getIdProfile() {
+        return idProfile;
+    }
+
+    public void setIdProfile(int idProfile) {
+        this.idProfile = idProfile;
+    }
 
     public int getIdVideocall() {
         return idVideocall;
