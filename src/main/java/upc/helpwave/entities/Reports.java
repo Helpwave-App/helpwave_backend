@@ -29,16 +29,28 @@ public class Reports {
     @Column(name = "dateReport", nullable = false)
     private LocalDateTime dateReport;
 
+    @Column(name = "idReported", nullable = false)
+    private int idReported;
+
     public Reports() {
     }
 
-    public Reports(int idReport, Videocall videocall, TypeReport typeReport, StateReport stateReport, String descriptionReport, LocalDateTime dateReport) {
+    public Reports(int idReport, Videocall videocall, TypeReport typeReport, StateReport stateReport, String descriptionReport, LocalDateTime dateReport, int idReported) {
         this.idReport = idReport;
         this.videocall = videocall;
         this.typeReport = typeReport;
         this.stateReport = stateReport;
         this.descriptionReport = descriptionReport;
         this.dateReport = dateReport;
+        this.idReported = idReported;
+    }
+
+    public int getIdReported() {
+        return idReported;
+    }
+
+    public void setIdReported(int idReported) {
+        this.idReported = idReported;
     }
 
     public int getIdReport() {
