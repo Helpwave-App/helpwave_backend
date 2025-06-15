@@ -12,6 +12,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import upc.helpwave.dtos.RegisterResponseDTO;
 import upc.helpwave.dtos.UserDTO;
+import upc.helpwave.entities.Level;
 import upc.helpwave.entities.User;
 import upc.helpwave.serviceinterfaces.IUserService;
 
@@ -30,6 +31,15 @@ public class UserController {
     public ResponseEntity<RegisterResponseDTO> register(@RequestBody UserDTO dto) {
         ModelMapper m = new ModelMapper();
         User u = m.map(dto, User.class);
+
+        if (u.getProfile() != null) {
+            Level defaultLevel = new Level();
+            defaultLevel.setIdLevel(1);
+            u.getProfile().setLevel(defaultLevel);
+
+            u.getProfile().setUser(u);
+        }
+
         uS.insert(u);
 
         int idUser = u.getIdUser();
