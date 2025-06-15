@@ -43,7 +43,7 @@ public class RequestServiceImplement implements IRequestService {
 
     @Override
     public List<Request> findPendingRequestsOlderThan(LocalDateTime threshold) {
-        return rR.findByStateRequestTrueAndDateRequestBefore(threshold);
+        return rR.findTrulyPendingRequestsOlderThan(threshold);
     }
 
     @Scheduled(fixedRate = 60000)
