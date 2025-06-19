@@ -72,9 +72,10 @@ HelpWave conecta a personas que requieren asistencia rápida con voluntarios dis
 | LanguageProfile  |    DELETE  |  /languageProfiles/{id}           | Eliminar un idioma asociado a un usuario por su id |
 | LanguageProfile  |    GET     |  /languageProfiles/{id}           | Obtener el idioma de un usuario por su id |
 | LanguageProfile  |    POST    |  /languageProfiles/batch          | Agregar más de un idioma a un usuario |
-| LanguageProfile  |    PUT     |  /languageProfiles                | Actualizar una disponibilidad |
+| LanguageProfile  |    PUT     |  /languageProfiles                | Actualizar un idioma de un usuario |
 | LanguageProfile  |    GET     |  /languageProfiles   | Obtener todos los idiomas de todos los usuarios |
-| LanguageProfile  |    GET     |  /languageProfiles/user/{idUser}  | Obtener un los idiomas de un usuario por el id de un usuario |
+| LanguageProfile  |    GET     |  /languageProfiles/user/{idUser}  | Obtener todos los idiomas de un usuario por su id |
+| LanguageProfile  |    PUT     |  /languageProfiles/profile/{id}  | Actualizar los idiomas de un usuario por su id |
 | Level  |    GET     |  /levels/progress/{idProfile} | Obtener el progreso de un usuario por su id |
 | Level  |    POST    |  /levels          | Agregar un nivel |
 | Level  |    DELETE  |  /levels/{id}           | Eliminar un nivel por su id |
@@ -86,11 +87,58 @@ HelpWave conecta a personas que requieren asistencia rápida con voluntarios dis
 | Profile  |    GET     |  /profiles/{id}           | Obtener un perfil por su id |
 | Profile  |    GET     |  /profiles          | Obtener todos los perfiles |
 | Profile  |    PATCH   |  /profiles/{id}          | Actualizar parcialmente un perfil |
-| Comments  |    POST    |  /comments | Agregar un comentario asociado a una videollamada |
-| Comments  |    DELETE  |  /comments/{id}           | Eliminar un comentario por su id |
-| Comments  |    GET     |  /comments/{id}           | Obtener un comentario por su id |
-| Comments  |    GET     |  /comments          | Obtener todos los comentarios |
-| Comments  |    PUT     |  /comments                | Actualizar un comentario |
+| Reports  |    POST    |  /reports | Agregar un reporte asociado a una videollamada |
+| Reports  |    DELETE  |  /reports/{id}           | Eliminar un reporte por su id |
+| Reports  |    GET     |  /reports/{id}           | Obtener un reporte por su id |
+| Reports  |    GET     |  /reports          | Obtener todos los reportes |
+| Reports  |    PUT     |  /reports                | Actualizar un reporte |
+| Request  |    POST    |  /requests | Agregar una solicitud para generar un emparejamiento y enviar notificaciones a voluntarios |
+| Request  |    DELETE  |  /requests/{id}           | Eliminar una solicitud por su id |
+| Request  |    GET     |  /requests/{id}           | Obtener una solicitud por su id |
+| Request  |    GET     |  /requests          | Obtener todos las solicitudes |
+| Request  |    PUT     |  /requests                | Actualizar una solicitud |
+| Request  |    PUT     |  /requests/cancel/{idRequest} | Cancelar una solicitud para que no pueda ser contestada |
+| Role  |    POST    |  /roles | Agregar un rol |
+| Role  |    DELETE  |  /roles/{id}           | Eliminar un rol por su id |
+| Role  |    GET     |  /roles/{id}           | Obtener un rol por su id |
+| Role  |    GET     |  /roles          | Obtener todos los roles |
+| Role  |    PUT     |  /roles                | Actualizar un rol |
+| Skill  |    POST    |  /skills | Agregar una habilidad |
+| Skill  |    DELETE  |  /skills/{id}           | Eliminar una habilidad por su id |
+| Skill  |    GET     |  /skills/{id}           | Obtener una habilidad por su id |
+| Skill  |    GET     |  /skills          | Obtener todas las habilidades |
+| Skill  |    PUT     |  /skills                | Actualizar una habilidad |
+| SkillProfile  |    POST    |  /skillProfiles                | Agregar una habilidad a un usuario |
+| SkillProfile  |    DELETE  |  /skillProfiles/{id}           | Eliminar una habilidad asociado a un usuario por su id |
+| SkillProfile  |    GET     |  /skillProfiles/{id}           | Obtener una habilidad de un usuario por el id |
+| SkillProfile  |    POST    |  /skillProfiles/batch          | Agregar más de una habilidad a un usuario |
+| SkillProfile  |    PUT     |  /skillProfiles                | Actualizar una habilidad |
+| SkillProfile  |    GET     |  /skillProfiles   | Obtener todas las habilidades de todos los usuarios |
+| SkillProfile  |    GET     |  /skillProfiles/user/{idUser}  | Obtener todas las habilidades de un usuario por su id |
+| SkillProfile  |    PUT     |  /skillProfiles/profile/{id}  | Actualizar las habilidades de un usuario por su id |
+| StateReport  |    POST    |  /stateReports | Agregar un estado de reporte |
+| StateReport  |    DELETE  |  /stateReports/{id}           | Eliminar un estado de reporte por su id |
+| StateReport  |    GET     |  /stateReports/{id}           | Obtener un estado de reporte por su id |
+| StateReport  |    GET     |  /stateReports          | Obtener todos los estados de reporte |
+| StateReport  |    PUT     |  /stateReports                | Actualizar un estado de reporte |
+| TypeReport  |    POST    |  /typeReports | Agregar un tipo de reporte |
+| TypeReport  |    DELETE  |  /typeReports/{id}           | Eliminar un tipo de reporte por su id |
+| TypeReport  |    GET     |  /typeReports/{id}           | Obtener un tipo de reporte por su id |
+| TypeReport  |    GET     |  /typeReports          | Obtener todos los tipos de reporte |
+| TypeReport  |    PUT     |  /typeReports                | Actualizar un tipo de reporte |
+| User  |    POST    |  /user/register          | Agregar un usuario y un perfil asociado |
+| User  |    DELETE  |  /user/{id}           | Eliminar un usuario por su id |
+| User  |    GET     |  /user/check-username | Verificar un usuario por su nombre de usuario |
+| User  |    GET     |  /user/{id}           | Obtener un usuario por su id |
+| User  |    GET     |  /user/list          | Obtener todos los usuarios |
+| User  |    PUT   |  /user/{id}          | Actualizar un usuario |
+| Videocall  |    GET     |  /videocalls/empairings/{id} | Obtener una videollamada por su id de emparejamiento |
+| Videocall  |    POST    |  /videocalls | Agregar una videollamada |
+| Videocall  |    DELETE  |  /videocalls/{id}           | Eliminar una videollamada por su id |
+| Videocall  |    GET     |  /videocalls/{id}           | Obtener una videollamada por su id |
+| Videocall  |    GET     |  /videocalls          | Obtener todos las videollamadas |
+| Videocall  |    PUT     |  /videocalls                | Actualizar una videollamada |
+| Videocall  |    PUT     |  /videocalls/end | Finalizar una videollamada para ambos usuarios conectados por el canal |
 
 ---
 
