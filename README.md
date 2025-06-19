@@ -36,15 +36,61 @@ HelpWave conecta a personas que requieren asistencia rápida con voluntarios dis
 
 ## 🔗 Endpoints
 
-| Controlador   |   Método   |         Endpoint         |                     Descripción                     |
-|---------------|------------|--------------------------|-----------------------------------------------------|
-| Availability  |    POST    |  /availabilities/batch   | Agregar más de una disponibilidad a un usuario |
-| Availability  |    DELETE  |  /availabilities/batch   | Agregar más de una disponibilidad a un usuario |
-| Availability  |     GET    |  /availabilities/batch   | Agregar más de una disponibilidad a un usuario |
-| Availability  |   POST  |  /availabilities/batch   | Agregar más de una disponibilidad a un usuario |
-| Availability  |   POST  |  /availabilities/batch   | Agregar más de una disponibilidad a un usuario |
-| Availability  |   POST  |  /availabilities/batch   | Agregar más de una disponibilidad a un usuario |
-| Availability  |   POST  |  /availabilities/batch   | Agregar más de una disponibilidad a un usuario |
+| Controlador   |   Método   |             Endpoint            |                     Descripción                     |
+|---------------|------------|---------------------------------|-----------------------------------------------------|
+| Availability  |    POST    |  /availabilities                | Agregar una disponibilidad a un usuario |
+| Availability  |    DELETE  |  /availabilities/{id}           | Eliminar una disponibilidad por su id |
+| Availability  |    GET     |  /availabilities/{id}           | Obtener una disponibilidad por su id |
+| Availability  |    POST    |  /availabilities/batch          | Agregar más de una disponibilidad a un usuario |
+| Availability  |    PUT     |  /availabilities                | Actualizar una disponibilidad |
+| Availability  |    PUT     |  /availabilities/profile/{id}   | Actualizar la disponibilidad por el id de un usuario |
+| Availability  |    GET     |  /availabilities/user/{idUser}  | Obtener una disponibilidad por el id de un usuario |
+| Comments  |    POST    |  /comments                      | Agregar un comentario asociado a una videollamada |
+| Comments  |    DELETE  |  /comments/{id}           | Eliminar un comentario por su id |
+| Comments  |    GET     |  /comments/{id}           | Obtener un comentario por su id |
+| Comments  |    GET     |  /comments          | Obtener todos los comentarios |
+| Comments  |    PUT     |  /comments                | Actualizar un comentario |
+| Device  |    POST    |  /devices | Agregar un dispositivo |
+| Device  |    DELETE  |  /devices/{id}           | Eliminar un comentario por su id |
+| Device  |    GET     |  /devices/{id}           | Obtener un dispositivo por su id |
+| Device  |    GET     |  /devices          | Obtener todos los dispositivos |
+| Device  |    PUT     |  /devices                | Actualizar un dispositivo |
+| Device  |    POST    |  /devices/upsert | Agregar o editar un dispositivo dependiendo si el token ingresado existe o no |
+| Empairing  |    POST    |  /empairings | Agregar un emparejamiento |
+| Empairing  |    DELETE  |  /empairings/{id}           | Eliminar un emparejamiento por su id |
+| Empairing  |    GET     |  /empairings/{id}           | Obtener un emparejamiento por su id |
+| Empairing  |    GET     |  /empairings          | Obtener todos los emparejamientos |
+| Empairing  |    PUT     |  /empairings                | Actualizar un emparejamiento |
+| Empairing  |    POST    |  /empairings/accept/{empairingId} | Aceptar un emparejamiento por su id para generar una videollamada |
+| JwtAuthentication  |    POST     |  /authenticate                | Iniciar Sesión con un nombre de usuario y contraseña |
+| Language  |    POST    |  /languages | Agregar un idioma |
+| Language  |    DELETE  |  /languages/{id}           | Eliminar un idioma por su id |
+| Language  |    GET     |  /languages/{id}           | Obtener un idioma por su id |
+| Language  |    GET     |  /languages          | Obtener todos los idiomas |
+| Language  |    PUT     |  /languages                | Actualizar un idioma |
+| LanguageProfile  |    POST    |  /languageProfiles                | Agregar un idioma a un usuario |
+| LanguageProfile  |    DELETE  |  /languageProfiles/{id}           | Eliminar un idioma asociado a un usuario por su id |
+| LanguageProfile  |    GET     |  /languageProfiles/{id}           | Obtener el idioma de un usuario por su id |
+| LanguageProfile  |    POST    |  /languageProfiles/batch          | Agregar más de un idioma a un usuario |
+| LanguageProfile  |    PUT     |  /languageProfiles                | Actualizar una disponibilidad |
+| LanguageProfile  |    GET     |  /languageProfiles   | Obtener todos los idiomas de todos los usuarios |
+| LanguageProfile  |    GET     |  /languageProfiles/user/{idUser}  | Obtener un los idiomas de un usuario por el id de un usuario |
+| Level  |    GET     |  /levels/progress/{idProfile} | Obtener el progreso de un usuario por su id |
+| Level  |    POST    |  /levels          | Agregar un nivel |
+| Level  |    DELETE  |  /levels/{id}           | Eliminar un nivel por su id |
+| Level  |    GET     |  /levels/{id}           | Obtener un nivel por su id |
+| Level  |    GET     |  /levels          | Obtener todos los niveles |
+| Level  |    PUT     |  /levels                | Actualizar un nivel |
+| Profile  |    POST    |  /profiles          | Agregar un perfil asociado a un usuario |
+| Profile  |    DELETE  |  /profiles/{id}           | Eliminar un perfil por su id |
+| Profile  |    GET     |  /profiles/{id}           | Obtener un perfil por su id |
+| Profile  |    GET     |  /profiles          | Obtener todos los perfiles |
+| Profile  |    PATCH   |  /profiles/{id}          | Actualizar parcialmente un perfil |
+| Comments  |    POST    |  /comments | Agregar un comentario asociado a una videollamada |
+| Comments  |    DELETE  |  /comments/{id}           | Eliminar un comentario por su id |
+| Comments  |    GET     |  /comments/{id}           | Obtener un comentario por su id |
+| Comments  |    GET     |  /comments          | Obtener todos los comentarios |
+| Comments  |    PUT     |  /comments                | Actualizar un comentario |
 
 ---
 
