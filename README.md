@@ -190,7 +190,6 @@ CREATE DATABASE helpwave;
 
 🔗 [HWAPP-Initial_Script-v.1.0.sql](./docs/HWAPP-Initial_Script-v.1.0.sql)
 
-
 ---
 
 ## 📄 Configuración de propiedades
