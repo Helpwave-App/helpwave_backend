@@ -30,7 +30,7 @@ HelpWave conecta a personas que requieren asistencia rápida con voluntarios dis
 | Backend       | Spring Boot, Java, PostgreSQL              |
 | Comunicación  | Firebase Auth, Firestore, Cloud Messaging  |
 | Videollamadas | Agora Video SDK                            |
-| CI/CD         | GitHub Actions + Firebase App Distribution |
+| Despliegue    | Render |
 
 ---
 
@@ -152,37 +152,6 @@ HelpWave conecta a personas que requieren asistencia rápida con voluntarios dis
 
 ---
 
-## 🔁 Versionado automático
-
-El proyecto sigue **Semantic Versioning** (`major.minor.patch`). El archivo `pubspec.yaml` y `CHANGELOG.md` se actualizan automáticamente mediante [GitHub Actions](https://github.com/features/actions).
-
-### 🎛️ Lanzamiento manual desde GitHub Actions
-
-1. Ir a la pestaña **Actions → Build & Distribute HelpWave**
-2. Clic en **“Run workflow”**
-3. Seleccionar:
-   - `patch`, `minor`, o `major`
-   - Ingresar notas de la versión
-
-> El workflow:
-> - Actualiza la versión
-> - Edita el `CHANGELOG.md`
-> - Crea un `git tag`
-> - Compila el APK
-> - Lo distribuye a Firebase App Distribution
-
----
-
-## 🚀 Distribución de builds
-
-### 📂 Script local para distribución manual
-
-```bash
-./scripts/deploy.sh "Notas de esta versión"
-```
-
-Este script compila el APK en modo release y lo distribuye automáticamente a Firebase App Distribution.
-
 ### 👥 Testers actuales
 
 - elvia.arteaga98@gmail.com  
@@ -212,4 +181,5 @@ Proyecto desarrollado como parte del trabajo de investigación para el título p
 Inspirado por iniciativas de microvoluntariado digital.
 
 🔽 [Descargar última versión APK](https://github.com/Helpwave-App/helpwave_mobile_app/releases/latest/download/app-release.apk)
+🔽 [Backend en Render](https://helpwave-backend.onrender.com)
 
