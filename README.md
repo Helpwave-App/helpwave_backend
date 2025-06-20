@@ -1,36 +1,37 @@
-# 📱 HelpWave
+# 📱 HelpWave Backend
 
 **Aplicación móvil de microvoluntariado digital basada en videollamadas para brindar asistencia remota, especialmente a personas adultas mayores.**
 
 HelpWave conecta a personas que requieren asistencia rápida con voluntarios disponibles mediante videollamadas, permitiendo resolver tareas cotidianas y técnicas de forma remota, segura y solidaria.
 
+Este repositorio contiene la API desarrollada en Spring Boot que proporciona los servicios fundamentales para la operación de la aplicación móvil, gestionando autenticación, perfiles, habilidades, disponibilidad, sesiones de ayuda y comentarios.
+
 ---
 
 ## 🚀 Funcionalidades principales
 
-- 🔐 Registro e inicio de sesión con Firebase
-- 🆘 Solicitud de ayuda categorizada
-- 📲 Notificaciones push a voluntarios
-- 📹 Videollamadas integradas (Agora)
-- ✅ Evaluación posterior a la llamada
-- 🌟 Sistema de niveles por desempeño
-- 🌐 Gestión de idiomas y disponibilidad
-- 📊 Reporte de videollamadas
-- 🎨 Interfaz multilingüe (Easy Localization)
-- 🌓 Soporte de tema claro/oscuro
+- 🔐 Autenticación con JWT
+- 👤 Gestión de usuarios, roles y perfiles
+- 🎯 Asignación y administración de habilidades
+- 📅 Control de disponibilidad de voluntarios
+- 📞 Registro de sesiones de ayuda y motivos de reporte
+- ⭐ Evaluación posterior a la videollamada
+- 🌍 Gestión de idiomas por perfil
+- 📲 Manejo de tokens de dispositivo para notificaciones push
 
 ---
 
 ## 🧰 Tecnologías utilizadas
 
-| Módulo        | Tecnología                                 |
-|---------------|--------------------------------------------|
-| Frontend      | Flutter 3.x, Dart                          |
-| Estado        | Riverpod + StateNotifier                   |
-| Backend       | Spring Boot, Java, PostgreSQL              |
-| Comunicación  | Firebase Auth, Firestore, Cloud Messaging  |
-| Videollamadas | Agora Video SDK                            |
-| Despliegue    | Render |
+| Componente        | Tecnología            |
+|-------------------|-----------------------|
+| Framework         | Spring Boot           |
+| Lenguaje          | Java 17               |
+| Base de datos     | PostgreSQL            |
+| Seguridad         | Spring Security + JWT |
+| ORM               | Spring Data JPA       |
+| Despliegue        | Render + Docker       |
+| Documentación API | Postman               |
 
 ---
 
@@ -146,16 +147,91 @@ HelpWave conecta a personas que requieren asistencia rápida con voluntarios dis
 
 ### 🔧 Requisitos previos
 
-- Base de Datos de PostreSQL
-- Archivo `firebase-service-account.json` en `src/main/resources/`
+- Java 17+
+- PostgreSQL
+- Maven
+- Archivo firebase-service-account.json en src/main/resources/
 - Permisos para acceder a Agora y Firebase
+
+### ▶️ Pasos de instalación
+
+1. Clonar el repositorio:
+
+```bash
+git clone https://github.com/Helpwave-App/helpwave_backend.git
+cd helpwave_backend
+```
+
+2. Configurar variables de entorno (usadas en `application.properties`):
+
+```env
+DB_URL=jdbc:postgresql://localhost:5432/helpwave
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
+PORT=8080
+JWT_SECRET=tu_clave_secreta
+AGORA_APP_ID=tu_app_id_de_agora
+AGORA_APP_CERTIFICATE=tu_app_certificate_de_agora
+```
+
+3. Crear la base de datos:
+
+```sql
+CREATE DATABASE helpwave;
+```
+
+4. Levantar la aplicación:
+
+```bash
+./mvnw spring-boot:run
+```
+
+5. Ejecutar el script de inicialización de datos:
+
+🔗 [HWAPP-Initial_Script-v.1.0.sql](./docs/HWAPP-Initial_Script-v.1.0.sql)
 
 ---
 
-### 👥 Testers actuales
+## 📄 Configuración de propiedades
 
-- elvia.arteaga98@gmail.com  
-- cuchcafabrizzio@gmail.com
+El backend utiliza `application.properties` para gestionar la configuración, incluyendo:
+
+```properties
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+
+jwt.secret=${JWT_SECRET}
+application.security.jwt.expiration=86400000
+application.security.jwt.refresh-token.expiration=604800000
+
+agora.app-id=${AGORA_APP_ID}
+agora.app-certificate=${AGORA_APP_CERTIFICATE}
+```
+
+---
+
+## 🐳 Despliegue en Render
+
+El despliegue en producción se realiza mediante **Docker** y Render, apuntando a la rama `master`.
+
+### 📁 Dockerfile incluido
+
+El archivo `Dockerfile` está configurado para compilar la aplicación y exponer el puerto configurado mediante la variable `${PORT}` (por defecto: `8080`).
+
+Render se encarga de:
+
+- Construir la imagen a partir del `Dockerfile`
+- Ejecutar la aplicación con las variables de entorno necesarias
+- Desplegar automáticamente en cada _push_ a `master`
+
+---
+
+## 📄 Documentación de la API
+
+La documentación completa de los endpoints se realizó en Postman. La colección se encuentra disponible en el siguiente archivo:
+
+🔗 [HelpWave.postman_collection.json](./docs/HelpWave.postman_collection.json)
 
 ---
 
@@ -163,7 +239,7 @@ HelpWave conecta a personas que requieren asistencia rápida con voluntarios dis
 
 | Nombre           | Rol                       |
 |------------------|---------------------------|
-| Elvi Arteaga     | Arquitectura, Flutter Dev |
+| Elvia Arteaga    | Arquitectura, Flutter Dev |
 | Fabrizzio Cuchca | Backend & DevOps Engineer |
 
 ---
@@ -177,8 +253,7 @@ Uso permitido con fines educativos, de investigación o sin fines de lucro.
 
 ## 🧩 Créditos y agradecimientos
 
-Proyecto desarrollado como parte del trabajo de investigación para el título profesional en Ingeniería de Software.  
-Inspirado por iniciativas de microvoluntariado digital.
+Este backend forma parte del ecosistema **HelpWave**, una solución digital desarrollada como parte del trabajo de investigación para la obtención del título profesional en Ingeniería de Software e Ingeniería de Sistemas.
 
 🔽 [Descargar última versión APK](https://github.com/Helpwave-App/helpwave_mobile_app/releases/latest/download/app-release.apk)
 🔽 [Backend en Render](https://helpwave-backend.onrender.com)
