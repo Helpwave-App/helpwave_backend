@@ -1,6 +1,5 @@
 package upc.helpwave.controllers;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,28 +19,57 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/levels")
 public class LevelController {
-    @Autowired
-    private ILevelService lS;
-    @Autowired
-    private ProfileRepository pR;
 
     @Autowired
-    private LevelRepository lR;
+    private ILevelService levelService;
+
+    @Autowired
+    private ProfileRepository profileRepository;
+
+    @Autowired
+    private LevelRepository levelRepository;
+
+    @PostMapping
+    public void register(@RequestBody LevelDTO dto) {
+        levelService.insert(fromDto(dto));
+    }
+
+    @PutMapping
+    public void update(@RequestBody LevelDTO dto) {
+        levelService.insert(fromDto(dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") Integer id) {
+        levelService.delete(id);
+    }
+
+    @GetMapping("/{id}")
+    public LevelDTO listId(@PathVariable("id") Integer id) {
+        Level level = levelService.listId(id);
+        return toDto(level);
+    }
+
+    @GetMapping
+    public List<LevelDTO> list() {
+        return levelService.list().stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
 
     @GetMapping("/progress/{idProfile}")
     public ResponseEntity<LevelProgressDTO> getLevelInfo(@PathVariable("idProfile") Integer idProfile) {
-        Optional<Profile> profileOpt = pR.findById(idProfile);
-
-        if (!profileOpt.isPresent()) {
+        Optional<Profile> profileOpt = profileRepository.findById(idProfile);
+        if (profileOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         Profile profile = profileOpt.get();
         Level currentLevel = profile.getLevel();
-        Integer assistances = profile.getAssistances() != null ? profile.getAssistances() : 0;
-        BigDecimal score = profile.getScoreProfile() != null ? profile.getScoreProfile() : BigDecimal.ZERO;
+        Integer assistances = Optional.ofNullable(profile.getAssistances()).orElse(0);
+        BigDecimal score = Optional.ofNullable(profile.getScoreProfile()).orElse(BigDecimal.ZERO);
 
-        Optional<Level> nextLevelOpt = lR
+        Optional<Level> nextLevelOpt = levelRepository
                 .findFirstByMinRequestGreaterThanOrderByMinRequestAsc(assistances);
 
         LevelProgressDTO dto = new LevelProgressDTO();
@@ -64,37 +92,23 @@ public class LevelController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping
-    public void register(@RequestBody LevelDTO dto) {
-        ModelMapper m = new ModelMapper();
-        Level r = m.map(dto, Level.class);
-        lS.insert(r);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Integer id) {
-        lS.delete(id);
-    }
-
-    @GetMapping("/{id}")
-    public LevelDTO listId(@PathVariable("id") Integer id) {
-        ModelMapper m = new ModelMapper();
-        LevelDTO dto = m.map(lS.listId(id), LevelDTO.class);
+    private LevelDTO toDto(Level entity) {
+        LevelDTO dto = new LevelDTO();
+        dto.setIdLevel(entity.getIdLevel());
+        dto.setNameLevel(entity.getNameLevel());
+        dto.setMinRequest(entity.getMinRequest());
+        dto.setMaxRequest(entity.getMaxRequest());
+        dto.setPhotoUrl(entity.getPhotoUrl());
         return dto;
     }
 
-    @GetMapping
-    public List<LevelDTO> list() {
-        return lS.list().stream().map(x -> {
-            ModelMapper m = new ModelMapper();
-            return m.map(x, LevelDTO.class);
-        }).collect(Collectors.toList());
-    }
-
-    @PutMapping
-    public void update(@RequestBody LevelDTO dto) {
-        ModelMapper m = new ModelMapper();
-        Level a = m.map(dto, Level.class);
-        lS.insert(a);
+    private Level fromDto(LevelDTO dto) {
+        Level entity = new Level();
+        entity.setIdLevel(dto.getIdLevel());
+        entity.setNameLevel(dto.getNameLevel());
+        entity.setMinRequest(dto.getMinRequest());
+        entity.setMaxRequest(dto.getMaxRequest());
+        entity.setPhotoUrl(dto.getPhotoUrl());
+        return entity;
     }
 }

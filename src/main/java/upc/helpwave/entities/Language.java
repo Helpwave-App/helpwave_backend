@@ -16,6 +16,10 @@ public class Language {
     public Language() {
     }
 
+    public Language(int idLanguage) {
+        this.idLanguage = idLanguage;
+    }
+
     public Language(int idLanguage, String nameLanguage) {
         this.idLanguage = idLanguage;
         this.nameLanguage = nameLanguage;

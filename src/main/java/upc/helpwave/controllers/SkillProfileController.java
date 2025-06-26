@@ -1,4 +1,5 @@
 package upc.helpwave.controllers;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,8 @@ import upc.helpwave.repositories.ProfileRepository;
 import upc.helpwave.repositories.SkillRepository;
 import upc.helpwave.repositories.UserRepository;
 import upc.helpwave.serviceinterfaces.ISkillProfileService;
+
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/skillProfiles")
 public class SkillProfileController {
+
     @Autowired
     private ISkillProfileService spS;
 
@@ -30,6 +34,22 @@ public class SkillProfileController {
 
     @Autowired
     private UserRepository uR;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @PostConstruct
+    public void init() {
+        if (modelMapper == null) {
+            modelMapper = new ModelMapper();
+
+            modelMapper.createTypeMap(SkillProfile.class, SkillProfileDTO.class).addMappings(mapper -> {
+                mapper.map(src -> src.getProfile().getIdProfile(), SkillProfileDTO::setIdProfile);
+                mapper.map(SkillProfile::getIdSkillProfile, SkillProfileDTO::setIdSkillProfile);
+                mapper.map(src -> src.getSkill().getIdSkill(), SkillProfileDTO::setIdSkill);
+            });
+        }
+    }
 
     @PostMapping("/batch")
     public void registerBatch(@RequestBody SkillProfileListDTO dto) {
@@ -53,48 +73,49 @@ public class SkillProfileController {
 
         spS.insertAll(list);
     }
+
     @PostMapping
-    public void register(@RequestBody SkillProfileDTO dto){
-        ModelMapper m=new ModelMapper();
-        SkillProfile r=m.map(dto, SkillProfile.class);
-        spS.insert(r);
+    public void register(@RequestBody SkillProfileDTO dto) {
+        SkillProfile sp = modelMapper.map(dto, SkillProfile.class);
+        spS.insert(sp);
     }
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Integer id)
-    {
+    public void delete(@PathVariable("id") Integer id) {
         spS.delete(id);
     }
 
     @GetMapping("/{id}")
-    public SkillProfileDTO listId(@PathVariable("id")Integer id){
-        ModelMapper m=new ModelMapper();
-        SkillProfileDTO dto=m.map(spS.listId(id),SkillProfileDTO.class);
-        return dto;
+    public SkillProfileDTO listId(@PathVariable("id") Integer id) {
+        SkillProfile sp = spS.listId(id);
+        return modelMapper.map(sp, SkillProfileDTO.class);
     }
+
     @GetMapping
-    public List<SkillProfileDTO> list(){
-        return spS.list().stream().map(x->{
-            ModelMapper m=new ModelMapper();
-            return m.map(x,SkillProfileDTO.class);
-        }).collect(Collectors.toList());
+    public List<SkillProfileDTO> list() {
+        List<SkillProfile> skillProfiles = spS.list();
+        return skillProfiles.stream()
+                .map(sp -> modelMapper.map(sp, SkillProfileDTO.class))
+                .collect(Collectors.toList());
     }
+
     @PutMapping
     public void update(@RequestBody SkillProfileDTO dto) {
-        ModelMapper m = new ModelMapper();
-        SkillProfile a=m.map(dto,SkillProfile.class);
-        spS.insert(a);
+        SkillProfile sp = modelMapper.map(dto, SkillProfile.class);
+        spS.insert(sp);
     }
+
     @PutMapping("/profile/{id}")
     public void updateByProfile(@PathVariable("id") Integer profileId, @RequestBody SkillProfileDTO dto) {
-        ModelMapper m = new ModelMapper();
-        SkillProfile skillProfile = m.map(dto, SkillProfile.class);
+        SkillProfile sp = modelMapper.map(dto, SkillProfile.class);
 
         Profile profile = new Profile();
         profile.setIdProfile(profileId);
-        skillProfile.setProfile(profile);
+        sp.setProfile(profile);
 
-        spS.insert(skillProfile);
+        spS.insert(sp);
     }
+
     @GetMapping("/user/{idUser}")
     public List<SkillProfileDTO> listByUser(@PathVariable("idUser") int idUser) {
         Optional<User> userOpt = uR.findById(idUser);
@@ -109,7 +130,6 @@ public class SkillProfileController {
 
         List<SkillProfile> skillProfiles = spS.findByProfile(profile);
 
-        ModelMapper m = new ModelMapper();
         return skillProfiles.stream()
                 .map(sp -> {
                     SkillProfileDTO dto = new SkillProfileDTO();

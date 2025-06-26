@@ -35,10 +35,14 @@ public class ProfileController {
     }
 
     @GetMapping("/{id}")
-    public ProfileDTO listId(@PathVariable("id") Integer id) {
+    public ResponseEntity<ProfileDTO> listId(@PathVariable("id") Integer id) {
+        Profile profile = pS.listId(id);
+        if (profile == null) {
+            return ResponseEntity.notFound().build();
+        }
         ModelMapper m = new ModelMapper();
-        ProfileDTO dto = m.map(pS.listId(id), ProfileDTO.class);
-        return dto;
+        ProfileDTO dto = m.map(profile, ProfileDTO.class);
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping
@@ -66,14 +70,22 @@ public class ProfileController {
             }
             existing.setLevel(levelOpt.get());
         }
-        if (dto.getName() != null) existing.setName(dto.getName());
-        if (dto.getLastName() != null) existing.setLastName(dto.getLastName());
-        if (dto.getBirthDate() != null) existing.setBirthDate(dto.getBirthDate());
-        if (dto.getScoreProfile() != null) existing.setScoreProfile(dto.getScoreProfile());
-        if (dto.getEmail() != null) existing.setEmail(dto.getEmail());
-        if (dto.getPhoneNumber() != null) existing.setPhoneNumber(dto.getPhoneNumber());
-        if (dto.getPhotoUrl() != null) existing.setPhotoUrl(dto.getPhotoUrl());
-        if (dto.getAssistances() != null) existing.setAssistances(dto.getAssistances());
+        if (dto.getName() != null)
+            existing.setName(dto.getName());
+        if (dto.getLastName() != null)
+            existing.setLastName(dto.getLastName());
+        if (dto.getBirthDate() != null)
+            existing.setBirthDate(dto.getBirthDate());
+        if (dto.getScoreProfile() != null)
+            existing.setScoreProfile(dto.getScoreProfile());
+        if (dto.getEmail() != null)
+            existing.setEmail(dto.getEmail());
+        if (dto.getPhoneNumber() != null)
+            existing.setPhoneNumber(dto.getPhoneNumber());
+        if (dto.getPhotoUrl() != null)
+            existing.setPhotoUrl(dto.getPhotoUrl());
+        if (dto.getAssistances() != null)
+            existing.setAssistances(dto.getAssistances());
 
         pS.insert(existing);
 

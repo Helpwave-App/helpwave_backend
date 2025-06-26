@@ -9,7 +9,6 @@ import upc.helpwave.dtos.EmpairingDTO;
 import upc.helpwave.dtos.NotificationMessageDTO;
 import upc.helpwave.dtos.VideocallDTO;
 import upc.helpwave.entities.*;
-import upc.helpwave.serviceimplements.EmpairingServiceImplement;
 import upc.helpwave.serviceimplements.FirebaseMessagingServiceImplement;
 import upc.helpwave.serviceinterfaces.IEmpairingService;
 import upc.helpwave.serviceinterfaces.IRequestService;
@@ -26,8 +25,6 @@ public class EmpairingController {
     private IEmpairingService eS;
     @Autowired
     private IVideocallService vS;
-    @Autowired
-    private EmpairingServiceImplement eSI;
     @Autowired
     private FirebaseMessagingServiceImplement fMS;
     @Autowired
@@ -79,7 +76,7 @@ public class EmpairingController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        Videocall videocall = eSI.acceptEmpairing(empairingId);
+        Videocall videocall = eS.acceptEmpairing(empairingId);
         if (videocall != null) {
             User user = request.getProfile().getUser();
 

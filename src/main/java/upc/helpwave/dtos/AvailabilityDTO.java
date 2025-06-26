@@ -2,10 +2,6 @@ package upc.helpwave.dtos;
 
 import java.time.LocalTime;
 
-import upc.helpwave.entities.Profile;
-
-import java.time.LocalTime;
-
 public class AvailabilityDTO {
     private int idAvailability;
     private int idProfile;

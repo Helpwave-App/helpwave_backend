@@ -8,10 +8,16 @@ import upc.helpwave.repositories.SkillProfileRepository;
 import upc.helpwave.serviceinterfaces.ISkillProfileService;
 
 import java.util.List;
+
 @Service
 public class SkillProfileServiceImplement implements ISkillProfileService {
     @Autowired
     private SkillProfileRepository spR;
+
+    public SkillProfileServiceImplement(SkillProfileRepository spR) {
+        this.spR = spR;
+    }
+
     @Override
     public void insert(SkillProfile skillProfile) {
         spR.save(skillProfile);
@@ -43,4 +49,3 @@ public class SkillProfileServiceImplement implements ISkillProfileService {
     }
 
 }
-

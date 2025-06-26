@@ -1,6 +1,7 @@
 package upc.helpwave.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,10 +20,19 @@ public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 * 1000;
+    private static final long DEFAULT_TOKEN_VALIDITY = 5 * 60 * 60 * 1000;
+
+    public static final long JWT_TOKEN_VALIDITY = DEFAULT_TOKEN_VALIDITY;
 
     @Value("${jwt.secret}")
     private String secret;
+
+    private long jwtTokenValidity = DEFAULT_TOKEN_VALIDITY;
+
+    // Setter para pruebas unitarias (no usar en producción)
+    public void setTokenValidity(long millis) {
+        this.jwtTokenValidity = millis;
+    }
 
     // retrieve username from jwt token
     public String getUsernameFromToken(String token) {
@@ -68,13 +78,20 @@ public class JwtTokenUtil implements Serializable {
     private String doGenerateToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtTokenValidity))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     // validate token
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        try {
+            final String username = getUsernameFromToken(token);
+            return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        } catch (ExpiredJwtException e) {
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
     }
+
 }

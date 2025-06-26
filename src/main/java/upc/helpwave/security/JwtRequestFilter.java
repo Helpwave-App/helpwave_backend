@@ -27,20 +27,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 
-		String path = request.getRequestURI();
-		if (path.equals("/authenticate") ||
-				path.equals("/user/register") ||
-				path.equals("/skillProfiles/batch") ||
-				path.equals("/availabilities/batch") ||
-				path.equals("/skills") ||
-				path.equals("/user/check-username") ||
-				path.equals("/notification") ||
-				path.equals("/languageProfiles/batch") ||
-				path.equals("/languageProfiles")) {
-			chain.doFilter(request, response);
-			return;
-		}
-
 		final String requestTokenHeader = request.getHeader("Authorization");
 		String username = null;
 		String jwtToken = null;
@@ -50,12 +36,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			try {
 				username = jwtTokenUtil.getUsernameFromToken(jwtToken);
 			} catch (IllegalArgumentException e) {
-				System.out.println("No se puede encontrar el token JWT");
+				logger.warn("No se puede encontrar el token JWT");
 			} catch (ExpiredJwtException e) {
-				System.out.println("Token JWT ha expirado");
+				logger.warn("Token JWT ha expirado");
 			}
-		} else {
-			logger.warn("JWT Token no inicia con la palabra Bearer");
 		}
 
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -71,4 +55,5 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 		chain.doFilter(request, response);
 	}
+
 }

@@ -1,6 +1,7 @@
 package upc.helpwave.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import upc.helpwave.entities.User;
 import upc.helpwave.repositories.UserRepository;
 import upc.helpwave.security.JwtRequest;
@@ -43,13 +46,15 @@ public class JwtAuthenticationController {
 
         return ResponseEntity.ok(new JwtResponse(token, roleName, idUser));
     }
-    private void authenticate(String username, String password) throws Exception {
+
+    private void authenticate(String username, String password) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "INVALID_CREDENTIALS", e);
         }
     }
 }

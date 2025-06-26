@@ -54,6 +54,10 @@ public class Profile {
     public Profile() {
     }
 
+    public Profile(int idProfile) {
+        this.idProfile = idProfile;
+    }
+
     public Profile(int idProfile, String name, String lastName, BigDecimal scoreProfile) {
         this.idProfile = idProfile;
         this.name = name;
@@ -61,7 +65,8 @@ public class Profile {
         this.scoreProfile = scoreProfile;
     }
 
-    public Profile(int idProfile, Level level, String name, String lastName, LocalDate birthDate, BigDecimal scoreProfile) {
+    public Profile(int idProfile, Level level, String name, String lastName, LocalDate birthDate,
+            BigDecimal scoreProfile) {
         this.idProfile = idProfile;
         this.level = level;
         this.name = name;
@@ -70,7 +75,9 @@ public class Profile {
         this.scoreProfile = scoreProfile;
     }
 
-    public Profile(int idProfile, Level level, String name, String lastName, LocalDate birthDate, BigDecimal scoreProfile, String email, String phoneNumber, String photoUrl, Integer assistances, User user) {
+    public Profile(int idProfile, Level level, String name, String lastName, LocalDate birthDate,
+            BigDecimal scoreProfile, String email, String phoneNumber, String photoUrl, Integer assistances,
+            User user) {
         this.idProfile = idProfile;
         this.level = level;
         this.name = name;

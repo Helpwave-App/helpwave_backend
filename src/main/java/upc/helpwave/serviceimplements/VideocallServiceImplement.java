@@ -20,6 +20,10 @@ public class VideocallServiceImplement implements IVideocallService {
     @Autowired
     private VideocallRepository vR;
 
+    public VideocallServiceImplement(VideocallRepository vR) {
+        this.vR = vR;
+    }
+
     @Value("${agora.app-id}")
     private String appId;
 
@@ -76,8 +80,18 @@ public class VideocallServiceImplement implements IVideocallService {
         empairing.setIdEmpairing(idEmpairing);
         return vR.findByEmpairing(empairing);
     }
+
     @Override
     public Optional<Videocall> findByChannel(String channel) {
         return vR.findByChannel(channel);
+    }
+
+    // Métodos solo para testing
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public void setAppCertificate(String appCertificate) {
+        this.appCertificate = appCertificate;
     }
 }
