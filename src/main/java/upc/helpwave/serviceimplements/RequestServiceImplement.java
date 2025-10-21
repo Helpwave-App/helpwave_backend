@@ -73,13 +73,27 @@ public class RequestServiceImplement implements IRequestService {
             requests = empairings.stream().map(Empairing::getRequest).collect(Collectors.toList());
         }
 
-                ModelMapper modelMapper = new ModelMapper();
+                        ModelMapper modelMapper = new ModelMapper();
 
-                return requests.stream()
+                        List<RequestDTO> requestDTOs = new ArrayList<>();
 
-                        .map(request -> modelMapper.map(request, RequestDTO.class))
+                
 
-                        .collect(Collectors.toList());
+                        for (Request request : requests) {
+
+                            RequestDTO dto = modelMapper.map(request, RequestDTO.class);
+
+                            dto.setDateRequest(request.getDateRequest());
+
+                            dto.setSkillDescription(request.getSkill().getSkillDesc());
+
+                            dto.setDuration("0 seg"); // Temporarily set duration to 0
+
+                            requestDTOs.add(dto);
+
+                        }
+
+                        return requestDTOs;
     }
 
     @Override
