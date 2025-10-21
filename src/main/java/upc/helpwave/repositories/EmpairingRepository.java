@@ -18,4 +18,5 @@ public interface EmpairingRepository extends JpaRepository<Empairing, Integer> {
     List<Integer> findProfileIdsByIdRequest(@Param("idRequest") Integer idRequest);
     List<Empairing> findByProfile(Profile profile);
     List<Empairing> findByRequest(Request request);
+    List<Empairing> findByProfileAndStateEmpairingTrue(Profile profile);
 }

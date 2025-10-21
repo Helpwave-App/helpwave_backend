@@ -69,7 +69,7 @@ public class RequestServiceImplement implements IRequestService {
         if ("REQUESTER".equalsIgnoreCase(user.getRole().getRole())) {
             requests = rR.findByProfile(user.getProfile());
         } else if ("VOLUNTEER".equalsIgnoreCase(user.getRole().getRole())) {
-            List<Empairing> empairings = eR.findByProfile(user.getProfile());
+            List<Empairing> empairings = eR.findByProfileAndStateEmpairingTrue(user.getProfile());
             requests = empairings.stream().map(Empairing::getRequest).collect(Collectors.toList());
         }
 
