@@ -17,5 +17,5 @@ public interface EmpairingRepository extends JpaRepository<Empairing, Integer> {
     @Query("SELECT e.profile.idProfile FROM Empairing e WHERE e.request.idRequest = :idRequest")
     List<Integer> findProfileIdsByIdRequest(@Param("idRequest") Integer idRequest);
     List<Empairing> findByProfile(Profile profile);
-    Empairing findByRequest(Request request);
+    List<Empairing> findByRequest(Request request);
 }
