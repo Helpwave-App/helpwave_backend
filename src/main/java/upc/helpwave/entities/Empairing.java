@@ -1,6 +1,7 @@
 package upc.helpwave.entities;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Empairing")
@@ -20,14 +21,18 @@ public class Empairing {
     @Column(name = "stateEmpairing", nullable = false)
     private Boolean stateEmpairing;
 
+    @Column(name = "dateEmpairing", nullable = true)
+    private LocalDateTime dateEmpairing;
+
     public Empairing() {
     }
 
-    public Empairing(int idEmpairing, Request request, Profile profile, Boolean stateEmpairing) {
+    public Empairing(int idEmpairing, Request request, Profile profile, Boolean stateEmpairing, LocalDateTime dateEmpairing) {
         this.idEmpairing = idEmpairing;
         this.request = request;
         this.profile = profile;
         this.stateEmpairing = stateEmpairing;
+        this.dateEmpairing = dateEmpairing;
     }
 
     public int getIdEmpairing() {
@@ -60,5 +65,13 @@ public class Empairing {
 
     public void setStateEmpairing(Boolean stateEmpairing) {
         this.stateEmpairing = stateEmpairing;
+    }
+
+    public LocalDateTime getDateEmpairing() {
+        return dateEmpairing;
+    }
+
+    public void setDateEmpairing(LocalDateTime dateEmpairing) {
+        this.dateEmpairing = dateEmpairing;
     }
 }
