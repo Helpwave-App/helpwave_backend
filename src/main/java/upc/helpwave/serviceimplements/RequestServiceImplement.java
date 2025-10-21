@@ -73,59 +73,33 @@ public class RequestServiceImplement implements IRequestService {
             requests = empairings.stream().map(Empairing::getRequest).collect(Collectors.toList());
         }
 
-                        ModelMapper modelMapper = new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
 
-                        List<RequestDTO> requestDTOs = new ArrayList<>();
+        List<RequestDTO> requestDTOs = new ArrayList<>();
+        for (Request request : requests) {
+            RequestDTO dto = modelMapper.map(request, RequestDTO.class);
+            dto.setDateRequest(request.getDateRequest());
+            dto.setSkillDescription(request.getSkill().getSkillDesc());
 
-                
-
-                        for (Request request : requests) {
-
-                            RequestDTO dto = modelMapper.map(request, RequestDTO.class);
-
-                            dto.setDateRequest(request.getDateRequest());
-
-                            dto.setSkillDescription(request.getSkill().getSkillDesc());
-
-                                                    // Calculate duration
-
-                                                    List<Empairing> empairings = eR.findByRequest(request);
-
-                                                    String calculatedDuration = "0 seg"; // Default duration
-
-                                        
-
-                                                    for (Empairing empairing : empairings) {
-
-                                                        Optional<Videocall> videocallOpt = vR.findByEmpairing(empairing);
-
-                                                        if (videocallOpt.isPresent()) {
-
-                                                            Videocall videocall = videocallOpt.get();
-
-                                                            if (videocall.getStartVideocall() != null && videocall.getEndVideocall() != null) {
-
-                        long totalSeconds = java.time.Duration
+            // Calculate duration
+            List<Empairing> empairings = eR.findByRequest(request);
+            String calculatedDuration = "0 seg"; // Default duration
+            for (Empairing empairing : empairings) {
+                Optional<Videocall> videocallOpt = vR.findByEmpairing(empairing);
+                if (videocallOpt.isPresent()) {
+                    Videocall videocall = videocallOpt.get();
+                    if (videocall.getStartVideocall() != null && videocall.getEndVideocall() != null) {
+                        long seconds = java.time.Duration
                                 .between(videocall.getStartVideocall(), videocall.getEndVideocall()).getSeconds();
-                        long minutes = totalSeconds / 60;
-                        long remainingSeconds = totalSeconds % 60;
-                        dto.setDuration(minutes + " min " + remainingSeconds + " seg");
-
-                                                                break; // Found a videocall with duration, so break
-
-                                                            }
-
-                                                        }
-
-                                                    }
-
-                                                    dto.setDuration(calculatedDuration);
-
-                                        requestDTOs.add(dto);
-
-                                    }
-
-                                    return requestDTOs;
+                        calculatedDuration = seconds + " seg";
+                        break; // Found a videocall with duration, so break
+                    }
+                }
+            }
+            dto.setDuration(calculatedDuration);
+            requestDTOs.add(dto);
+        }
+        return requestDTOs;
     }
 
     @Override
