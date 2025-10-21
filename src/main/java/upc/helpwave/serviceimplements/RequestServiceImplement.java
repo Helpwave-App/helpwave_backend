@@ -105,11 +105,11 @@ public class RequestServiceImplement implements IRequestService {
 
                                                             if (videocall.getStartVideocall() != null && videocall.getEndVideocall() != null) {
 
-                                                                long seconds = java.time.Duration
-
-                                                                        .between(videocall.getStartVideocall(), videocall.getEndVideocall()).getSeconds();
-
-                                                                calculatedDuration = seconds + " seg";
+                        long totalSeconds = java.time.Duration
+                                .between(videocall.getStartVideocall(), videocall.getEndVideocall()).getSeconds();
+                        long minutes = totalSeconds / 60;
+                        long remainingSeconds = totalSeconds % 60;
+                        dto.setDuration(minutes + " min " + remainingSeconds + " seg");
 
                                                                 break; // Found a videocall with duration, so break
 
