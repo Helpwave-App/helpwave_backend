@@ -1,20 +1,33 @@
 package upc.helpwave.serviceimplements;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import upc.helpwave.dtos.RequestDTO;
+import upc.helpwave.entities.Empairing;
 import upc.helpwave.entities.Request;
+import upc.helpwave.entities.User;
+import upc.helpwave.repositories.EmpairingRepository;
 import upc.helpwave.repositories.RequestRepository;
+import upc.helpwave.repositories.UserRepository;
 import upc.helpwave.serviceinterfaces.IRequestService;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RequestServiceImplement implements IRequestService {
     @Autowired
     private RequestRepository rR;
+    @Autowired
+    private UserRepository uR;
+    @Autowired
+    private EmpairingRepository eR;
 
     @Override
     public void insert(Request request) {
@@ -34,6 +47,26 @@ public class RequestServiceImplement implements IRequestService {
     @Override
     public List<Request> list() {
         return rR.findAll();
+    }
+
+    @Override
+    public List<RequestDTO> findRequestHistory() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = uR.findByUsername(userDetails.getUsername());
+        List<Request> requests = new ArrayList<>();
+
+        // Assuming role names are "REQUESTER" and "VOLUNTEER"
+        if ("REQUESTER".equalsIgnoreCase(user.getRole().getRole())) {
+            requests = rR.findByProfile(user.getProfile());
+        } else if ("VOLUNTEER".equalsIgnoreCase(user.getRole().getRole())) {
+            List<Empairing> empairings = eR.findByProfile(user.getProfile());
+            requests = empairings.stream().map(Empairing::getRequest).collect(Collectors.toList());
+        }
+
+        ModelMapper modelMapper = new ModelMapper();
+        return requests.stream()
+                .map(request -> modelMapper.map(request, RequestDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override

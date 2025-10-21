@@ -34,6 +34,12 @@ public class RequestController {
     @Autowired
     private FirebaseMessagingServiceImplement fMS;
 
+    @GetMapping("/history")
+    public ResponseEntity<List<RequestDTO>> getRequestHistory() {
+        List<RequestDTO> history = rS.findRequestHistory();
+        return new ResponseEntity<>(history, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Integer id) {
         rS.delete(id);
