@@ -6,18 +6,22 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
 import upc.helpwave.dtos.RequestDTO;
 import upc.helpwave.entities.Empairing;
 import upc.helpwave.entities.Request;
 import upc.helpwave.entities.User;
+import upc.helpwave.entities.Videocall;
 import upc.helpwave.repositories.EmpairingRepository;
 import upc.helpwave.repositories.RequestRepository;
 import upc.helpwave.repositories.UserRepository;
+import upc.helpwave.repositories.VideocallRepository;
 import upc.helpwave.serviceinterfaces.IRequestService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +32,8 @@ public class RequestServiceImplement implements IRequestService {
     private UserRepository uR;
     @Autowired
     private EmpairingRepository eR;
+    @Autowired
+    private VideocallRepository vR;
 
     @Override
     public void insert(Request request) {
@@ -64,9 +70,36 @@ public class RequestServiceImplement implements IRequestService {
         }
 
         ModelMapper modelMapper = new ModelMapper();
-        return requests.stream()
-                .map(request -> modelMapper.map(request, RequestDTO.class))
-                .collect(Collectors.toList());
+        List<RequestDTO> requestDTOs = new ArrayList<>();
+
+        for (Request request : requests) {
+            RequestDTO dto = modelMapper.map(request, RequestDTO.class);
+            dto.setDateRequest(request.getDateRequest());
+            dto.setSkillDescription(request.getSkill().getSkillDesc());
+
+            // Calculate duration
+            Empairing empairing = eR.findByRequest(request);
+
+            if (empairing != null) {
+                Optional<Videocall> videocallOpt = vR.findByEmpairing(empairing);
+                if (videocallOpt.isPresent()) {
+                    Videocall videocall = videocallOpt.get();
+                    if (videocall.getStartVideocall() != null && videocall.getEndVideocall() != null) {
+                        long seconds = java.time.Duration
+                                .between(videocall.getStartVideocall(), videocall.getEndVideocall()).getSeconds();
+                        dto.setDuration(seconds + " seg");
+                    } else {
+                        dto.setDuration("0 seg");
+                    }
+                } else {
+                    dto.setDuration("0 seg");
+                }
+            } else {
+                dto.setDuration("0 seg");
+            }
+            requestDTOs.add(dto);
+        }
+        return requestDTOs;
     }
 
     @Override
