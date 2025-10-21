@@ -59,6 +59,10 @@ public class RequestServiceImplement implements IRequestService {
     public List<RequestDTO> findRequestHistory() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = uR.findByUsername(userDetails.getUsername());
+        if (user == null || user.getRole() == null || user.getProfile() == null) {
+            // Log an error or throw a more specific exception if needed
+            return new ArrayList<>(); // Return empty list if user data is incomplete
+        }
         List<Request> requests = new ArrayList<>();
 
         // Assuming role names are "REQUESTER" and "VOLUNTEER"
@@ -69,37 +73,13 @@ public class RequestServiceImplement implements IRequestService {
             requests = empairings.stream().map(Empairing::getRequest).collect(Collectors.toList());
         }
 
-        ModelMapper modelMapper = new ModelMapper();
-        List<RequestDTO> requestDTOs = new ArrayList<>();
+                ModelMapper modelMapper = new ModelMapper();
 
-        for (Request request : requests) {
-            RequestDTO dto = modelMapper.map(request, RequestDTO.class);
-            dto.setDateRequest(request.getDateRequest());
-            dto.setSkillDescription(request.getSkill().getSkillDesc());
+                return requests.stream()
 
-            // Calculate duration
-            Empairing empairing = eR.findByRequest(request);
+                        .map(request -> modelMapper.map(request, RequestDTO.class))
 
-            if (empairing != null) {
-                Optional<Videocall> videocallOpt = vR.findByEmpairing(empairing);
-                if (videocallOpt.isPresent()) {
-                    Videocall videocall = videocallOpt.get();
-                    if (videocall.getStartVideocall() != null && videocall.getEndVideocall() != null) {
-                        long seconds = java.time.Duration
-                                .between(videocall.getStartVideocall(), videocall.getEndVideocall()).getSeconds();
-                        dto.setDuration(seconds + " seg");
-                    } else {
-                        dto.setDuration("0 seg");
-                    }
-                } else {
-                    dto.setDuration("0 seg");
-                }
-            } else {
-                dto.setDuration("0 seg");
-            }
-            requestDTOs.add(dto);
-        }
-        return requestDTOs;
+                        .collect(Collectors.toList());
     }
 
     @Override
