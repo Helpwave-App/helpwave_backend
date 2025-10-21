@@ -87,57 +87,39 @@ public class RequestServiceImplement implements IRequestService {
 
                             dto.setSkillDescription(request.getSkill().getSkillDesc());
 
-                                        // Calculate duration
+                                                    // Calculate duration
 
-                                        Empairing empairing = eR.findByRequest(request);
+                                                    List<Empairing> empairings = eR.findByRequest(request);
 
-                            
+                                                    String calculatedDuration = "0 seg"; // Default duration
 
-                                        if (empairing != null) {
+                                        
 
-                                            Optional<Videocall> videocallOpt = vR.findByEmpairing(empairing);
+                                                    for (Empairing empairing : empairings) {
 
-                                            if (videocallOpt.isPresent()) {
+                                                        Optional<Videocall> videocallOpt = vR.findByEmpairing(empairing);
 
-                                                Videocall videocall = videocallOpt.get();
+                                                        if (videocallOpt.isPresent()) {
 
-                                                if (videocall.getStartVideocall() != null && videocall.getEndVideocall() != null) {
+                                                            Videocall videocall = videocallOpt.get();
 
-                                                    long seconds = java.time.Duration
+                                                            if (videocall.getStartVideocall() != null && videocall.getEndVideocall() != null) {
 
-                                                            .between(videocall.getStartVideocall(), videocall.getEndVideocall()).getSeconds();
+                                                                long seconds = java.time.Duration
 
-                                                    dto.setDuration(seconds + " seg");
+                                                                        .between(videocall.getStartVideocall(), videocall.getEndVideocall()).getSeconds();
 
-                                                } else {
+                                                                calculatedDuration = seconds + " seg";
 
-                                                    // Log: Videocall found but start/end times are null
+                                                                break; // Found a videocall with duration, so break
 
-                                                    System.out.println("Videocall found for request " + request.getIdRequest() + " but start/end times are null.");
+                                                            }
 
-                                                    dto.setDuration("0 seg");
+                                                        }
 
-                                                }
+                                                    }
 
-                                            } else {
-
-                                                // Log: Empairing found but no associated Videocall
-
-                                                System.out.println("Empairing found for request " + request.getIdRequest() + " but no associated Videocall.");
-
-                                                dto.setDuration("0 seg");
-
-                                            }
-
-                                        } else {
-
-                                            // Log: No Empairing found for request
-
-                                            System.out.println("No Empairing found for request " + request.getIdRequest() + ".");
-
-                                            dto.setDuration("0 seg");
-
-                                        }
+                                                    dto.setDuration(calculatedDuration);
 
                                         requestDTOs.add(dto);
 
