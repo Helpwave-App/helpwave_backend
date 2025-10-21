@@ -87,13 +87,63 @@ public class RequestServiceImplement implements IRequestService {
 
                             dto.setSkillDescription(request.getSkill().getSkillDesc());
 
-                            dto.setDuration("0 seg"); // Temporarily set duration to 0
+                                        // Calculate duration
 
-                            requestDTOs.add(dto);
+                                        Empairing empairing = eR.findByRequest(request);
 
-                        }
+                            
 
-                        return requestDTOs;
+                                        if (empairing != null) {
+
+                                            Optional<Videocall> videocallOpt = vR.findByEmpairing(empairing);
+
+                                            if (videocallOpt.isPresent()) {
+
+                                                Videocall videocall = videocallOpt.get();
+
+                                                if (videocall.getStartVideocall() != null && videocall.getEndVideocall() != null) {
+
+                                                    long seconds = java.time.Duration
+
+                                                            .between(videocall.getStartVideocall(), videocall.getEndVideocall()).getSeconds();
+
+                                                    dto.setDuration(seconds + " seg");
+
+                                                } else {
+
+                                                    // Log: Videocall found but start/end times are null
+
+                                                    System.out.println("Videocall found for request " + request.getIdRequest() + " but start/end times are null.");
+
+                                                    dto.setDuration("0 seg");
+
+                                                }
+
+                                            } else {
+
+                                                // Log: Empairing found but no associated Videocall
+
+                                                System.out.println("Empairing found for request " + request.getIdRequest() + " but no associated Videocall.");
+
+                                                dto.setDuration("0 seg");
+
+                                            }
+
+                                        } else {
+
+                                            // Log: No Empairing found for request
+
+                                            System.out.println("No Empairing found for request " + request.getIdRequest() + ".");
+
+                                            dto.setDuration("0 seg");
+
+                                        }
+
+                                        requestDTOs.add(dto);
+
+                                    }
+
+                                    return requestDTOs;
     }
 
     @Override
